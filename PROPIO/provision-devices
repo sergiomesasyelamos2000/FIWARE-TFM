@@ -1,0 +1,165 @@
+#!/bin/bash
+#
+#  curl commands to reload the data from the previous tutorial
+#
+#
+
+set -e
+
+printf "⏳ Provisioning IoT devices "
+
+
+#
+# Create a service groups for all UltraLight IoT devices
+#
+
+curl -s -o /dev/null -X POST \
+  "http://iot-agent:$IOTA_NORTH_PORT/iot/services" \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+    "services": [
+        {
+            "apikey": "4jggokgpepnvsb2uv4s40d59ov",
+            "cbroker": "http://orion:1026",
+            "entity_type": "BinarySensor",
+            "resource": ""
+        }
+    ]
+}'
+
+curl -s -o /dev/null -X POST \
+  "http://iot-agent:$IOTA_NORTH_PORT/iot/services" \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+    "services": [
+        {
+            "apikey": "f1aa255e-yfzd-4253-znvy-ee3dda78a28c",
+            "cbroker": "http://orion:1026",
+            "entity_type": "LocationUser",
+            "resource": ""
+        }
+    ]
+}'
+
+curl -s -o /dev/null -X POST \
+  "http://iot-agent:$IOTA_NORTH_PORT/iot/devices" \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+    "devices": [
+        {
+            "device_id": "binarySensor001",
+            "entity_name": "urn:ngsi-ld:BinarySensor:001",
+            "entity_type": "BinarySensor",
+            "protocol": "PDI-IoTA-UltraLight",
+            "transport": "MQTT",
+            "timezone": "Europe/Madrid",
+            "attributes": [
+                {
+                    "object_id": "timestamp_sensor",
+                    "name": "timestamp_sensor",
+                    "type": "DateTime"
+                },
+                {
+                    "object_id": "activo",
+                    "name": "activo",
+                    "type": "Integer"
+                }
+            ],
+            "static_attributes": [
+                {
+                    "name": "tipo_sensor",
+                    "type": "Text",
+                    "value": "cocina_puerta"
+                }
+            ]
+        }
+    ]
+}
+'
+
+curl -s -o /dev/null -X POST \
+  "http://iot-agent:$IOTA_NORTH_PORT/iot/devices" \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+    "devices": [
+        {
+            "device_id": "locationUser001",
+            "entity_name": "urn:ngsi-ld:LocationUser:001",
+            "entity_type": "LocationUser",
+            "protocol": "PDI-IoTA-UltraLight",
+            "transport": "MQTT",
+            "timezone": "Europe/Madrid",
+            "attributes": [
+                {
+                    "object_id": "timestamp_sensor",
+                    "name": "timestamp_sensor",
+                    "type": "DateTime"
+                },
+                {
+                    "object_id": "x1",
+                    "name": "x1",
+                    "type": "Integer"
+                },
+                {
+                    "object_id": "x2",
+                    "name": "x2",
+                    "type": "Integer"
+                },
+                {
+                    "object_id": "y1",
+                    "name": "y1",
+                    "type": "Integer"
+                },
+                {
+                    "object_id": "y2",
+                    "name": "y2",
+                    "type": "Integer"
+                },
+                {
+                    "object_id": "uncertain",
+                    "name": "uncertain",
+                    "type": "Float"
+                }
+            ],
+            "static_attributes": [
+                {
+                    "name": "user_id",
+                    "type": "Text",
+                    "value": "A"
+                }
+            ]
+        }
+    ]
+}
+'
+
+curl -s -o /dev/null -X POST \
+  "http://orion:${ORION_PORT}/v2/subscriptions/" \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "description": "Notify Quantum Leap to sample BinarySensor changes every second",
+  "subject": {
+    "entities": [
+      {
+        "idPattern": ".*"
+      }
+    ]
+  },
+  "notification": {
+    "http": {
+      "url": "http://quantumleap:8668/v2/notify"
+    },
+    "metadata": ["dateCreated", "dateModified"]
+  },
+  "throttling": 1
+}'

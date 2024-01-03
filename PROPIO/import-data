@@ -1,0 +1,117 @@
+#!/bin/bash
+#
+#  curl commands to reload the data from the previous tutorial
+#
+#
+
+set -e
+
+printf "⏳ Loading context data "
+
+#
+# Create four Store Entities in various locations across Berlin
+#
+curl -s -o /dev/null -X POST \
+  'http://orion:1026/v2/op/update' \
+  -H 'Content-Type: application/json' \
+  -g -d '{
+    "actionType": "APPEND",
+    "entities": [
+        {
+            "type": "BinarySensor",
+            "id": "urn:ngsi-ld:BinarySensor:001",
+            "name": {
+                "type": "Text",
+                "value": "wc_puerta"
+            },
+            "date": {
+                "type": "Text",
+                "value": "2023-12-27 12:17:10"
+            },
+            "isActive": {
+                "type": "Boolean",
+                "value": "True"
+            }
+        },
+        {
+            "type": "BinarySensor",
+            "id": "urn:ngsi-ld:BinarySensor:002",
+            "name": {
+                "type": "Text",
+                "value": "cocina_puerta"
+            },
+            "date": {
+                "type": "Text",
+                "value": "2023-12-27 12:17:10"
+            },
+            "isActive": {
+                "type": "Boolean",
+                "value": "False"
+            }
+        },
+        {
+            "type": "BinarySensor",
+            "id": "urn:ngsi-ld:BinarySensor:003",
+            "name": {
+                "type": "Text",
+                "value": "cocina_frigo"
+            },
+            "date": {
+                "type": "Text",
+                "value": "2023-12-27 12:17:10"
+            },
+            "isActive": {
+                "type": "Boolean",
+                "value": "True"
+            }
+        },
+        {
+            "type": "BinarySensor",
+            "id": "urn:ngsi-ld:BinarySensor:004",
+            "name": {
+                "type": "Text",
+                "value": "dormitorio_puerta"
+            },
+            "date": {
+                "type": "Text",
+                "value": "2023-12-27 12:17:10"
+            },
+            "isActive": {
+                "type": "Boolean",
+                "value": "False"
+            }
+        },
+        {
+            "type": "BinarySensor",
+            "id": "urn:ngsi-ld:BinarySensor:005",
+            "name": {
+                "type": "Text",
+                "value": "dormitorio_presencia"
+            },
+            "date": {
+                "type": "Text",
+                "value": "2023-12-27 12:17:10"
+            },
+            "isActive": {
+                "type": "Boolean",
+                "value": "True"
+            }
+        },
+        {
+            "type": "BinarySensor",
+            "id": "urn:ngsi-ld:BinarySensor:006",
+            "name": {
+                "type": "Text",
+                "value": "salon_presencia"
+            },
+            "date": {
+                "type": "Text",
+                "value": "2023-12-27 12:17:10"
+            },
+            "isActive": {
+                "type": "Boolean",
+                "value": "False"
+            }
+        }
+    ]
+}'
