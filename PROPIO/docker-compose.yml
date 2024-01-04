@@ -41,7 +41,7 @@ services:
 
   # Quantum Leap is persisting Short Term History to Crate-DB
   quantumleap:
-    image: orchestracities/quantumleap:${QUANTUMLEAP_VERSION}
+    image: smartsdk/quantumleap
     labels:
       org.fiware: 'tutorial'
     hostname: quantumleap
@@ -167,7 +167,7 @@ services:
       - "4200:4200"
       # Transport protocol
       - "4300:4300"
-    command: crate -Cauth.host_based.enabled=false  -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*" -Cdiscovery.type=single-node
+    command: crate Clicense.enterprise=false -Cauth.host_based.enabled=false  -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*" -Cdiscovery.type=single-node
     environment:
       - CRATE_HEAP_SIZE=2g # see https://crate.io/docs/crate/howtos/en/latest/deployment/containers/docker.html#troubleshooting
     volumes:
@@ -205,14 +205,17 @@ services:
     networks:
       - default
 
-  mqtt-subscriber:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - mosquitto
+  # Angular Frontend
+  angular-frontend:
+    container_name: angular-frontend
+    restart: always
+    ports:
+      - "4400:4400"
     networks:
       - default
+    build: 
+      context: ./angular-frontend/angular-docker
+      dockerfile: Dockerfile
 
 networks:
   default:
