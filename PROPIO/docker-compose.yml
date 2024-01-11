@@ -205,18 +205,6 @@ services:
     networks:
       - default
 
-  # Angular Frontend
-  angular-frontend:
-    container_name: angular-frontend
-    restart: always
-    ports:
-      - "4400:4400"
-    networks:
-      - default
-    build: 
-      context: ./angular-frontend/angular-docker
-      dockerfile: Dockerfile
-
 networks:
   default:
     labels:
