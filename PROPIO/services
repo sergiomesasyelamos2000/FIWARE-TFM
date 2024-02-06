@@ -55,8 +55,11 @@ loadData () {
 }
 
 stoppingContainers () {
-	echo -e "Force removal of \033[1mmqtt-subscriber\033[0m"
-	(docker stop mqtt-subscriber &>/dev/null) || (echo -e "\033[1mmqtt-subscriber\033[0m not running")
+	echo "Stopping running containers"
+    ${dockerCmd} stop
+}
+
+downContainers () {
 	echo "Stopping running containers"
 	${dockerCmd} down -v --remove-orphans
 	CONTAINERS=$(docker ps --filter "label=org.fiware=tutorial" -aq)
@@ -149,7 +152,7 @@ waitForIoTAgent () {
 command="$1"
 case "${command}" in
 	"help")
-        echo "usage: services [create|start|stop]"
+        echo "usage: services [create|start|stop|down]"
         ;;
 	 "start")
 		export $(cat .env | grep "#" -v)
@@ -176,6 +179,10 @@ case "${command}" in
 		echo "Pulling Docker images"
 		docker pull -q quay.io/curl/curl
 		${dockerCmd} pull --ignore-pull-failures
+		;;
+	"down")
+		export $(cat .env | grep "#" -v)
+		downContainers
 		;;
 	*)
 		echo "Command not Found."

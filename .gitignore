@@ -35,5 +35,6 @@ jspm_packages/
 .eslintcache
 *.tgz
 .next
+mosquitto/
 *./TFM/PROPIO/mosquitto/data
 .PROPIO/mosquitto/data/mosquitto.db
