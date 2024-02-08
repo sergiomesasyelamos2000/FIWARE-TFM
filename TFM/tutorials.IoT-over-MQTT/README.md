@@ -18,40 +18,40 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/acfd27a941ed57a0cae5)
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/FIWARE/tutorials.IoT-Agent-over-MQTT/tree/NGSI-v2)
 
--   このチュートリアルは[日本語](README.ja.md)でもご覧いただけます。
+- このチュートリアルは[日本語](README.ja.md)でもご覧いただけます。
 
 ## Contents
 
 <details>
 <summary><strong>Details</strong></summary>
 
--   [What is MQTT?](#what-is-mqtt)
--   [Architecture](#architecture)
-    -   [Mosquitto Configuration](#mosquitto-configuration)
-    -   [Dummy IoT Devices Configuration](#dummy-iot-devices-configuration)
-    -   [IoT Agent for UltraLight 2.0 Configuration](#iot-agent-for-ultralight-20-configuration)
--   [Prerequisites](#prerequisites)
-    -   [Docker and Docker Compose](#docker-and-docker-compose)
-    -   [Cygwin for Windows](#cygwin-for-windows)
--   [Start Up](#start-up)
--   [Provisioning an IoT Agent (UltraLight over MQTT)](#provisioning-an-iot-agent-ultralight-over-mqtt)
-    -   [Checking Mosquitto Health](#checking-mosquitto-health)
-        -   [Start an MQTT Subscriber (:one:st Terminal)](#start-an-mqtt-subscriber-onest-terminal)
-        -   [Start an MQTT Publisher (:two:nd Terminal)](#start-an-mqtt-publisher-twond-terminal)
-        -   [Stop an MQTT Subscriber (:one:st Terminal)](#stop-an-mqtt-subscriber-onest-terminal)
-        -   [Show Mosquitto Log](#show-mosquitto-log)
-    -   [Checking the IoT Agent Service Health](#checking-the-iot-agent-service-health)
-    -   [Connecting IoT Devices](#connecting-iot-devices)
-        -   [Provisioning a Service Group for MQTT](#provisioning-a-service-group-for-mqtt)
-        -   [Provisioning a Sensor](#provisioning-a-sensor)
-        -   [Provisioning an Actuator](#provisioning-an-actuator)
-        -   [Provisioning a Smart Door](#provisioning-a-smart-door)
-        -   [Provisioning a Smart Lamp](#provisioning-a-smart-lamp)
-    -   [Enabling Context Broker Commands](#enabling-context-broker-commands)
-        -   [Ringing the Bell](#ringing-the-bell)
-        -   [Opening the Smart Door](#opening-the-smart-door)
-        -   [Switching on the Smart Lamp](#switching-on-the-smart-lamp)
--   [Next Steps](#next-steps)
+- [What is MQTT?](#what-is-mqtt)
+- [Architecture](#architecture)
+  - [Mosquitto Configuration](#mosquitto-configuration)
+  - [Dummy IoT Devices Configuration](#dummy-iot-devices-configuration)
+  - [IoT Agent for UltraLight 2.0 Configuration](#iot-agent-for-ultralight-20-configuration)
+- [Prerequisites](#prerequisites)
+  - [Docker and Docker Compose](#docker-and-docker-compose)
+  - [Cygwin for Windows](#cygwin-for-windows)
+- [Start Up](#start-up)
+- [Provisioning an IoT Agent (UltraLight over MQTT)](#provisioning-an-iot-agent-ultralight-over-mqtt)
+  - [Checking Mosquitto Health](#checking-mosquitto-health)
+    - [Start an MQTT Subscriber (:one:st Terminal)](#start-an-mqtt-subscriber-onest-terminal)
+    - [Start an MQTT Publisher (:two:nd Terminal)](#start-an-mqtt-publisher-twond-terminal)
+    - [Stop an MQTT Subscriber (:one:st Terminal)](#stop-an-mqtt-subscriber-onest-terminal)
+    - [Show Mosquitto Log](#show-mosquitto-log)
+  - [Checking the IoT Agent Service Health](#checking-the-iot-agent-service-health)
+  - [Connecting IoT Devices](#connecting-iot-devices)
+    - [Provisioning a Service Group for MQTT](#provisioning-a-service-group-for-mqtt)
+    - [Provisioning a Sensor](#provisioning-a-sensor)
+    - [Provisioning an Actuator](#provisioning-an-actuator)
+    - [Provisioning a Smart Door](#provisioning-a-smart-door)
+    - [Provisioning a Smart Lamp](#provisioning-a-smart-lamp)
+  - [Enabling Context Broker Commands](#enabling-context-broker-commands)
+    - [Ringing the Bell](#ringing-the-bell)
+    - [Opening the Smart Door](#opening-the-smart-door)
+    - [Switching on the Smart Lamp](#switching-on-the-smart-lamp)
+- [Next Steps](#next-steps)
 
 </details>
 
@@ -120,33 +120,33 @@ will also be using the dummy IoT devices created in the
 
 Therefore the overall architecture will consist of the following elements:
 
--   The FIWARE [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) which will receive requests using
-    [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
--   The FIWARE [IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/) which will:
-    -   receive southbound requests using [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) and convert
-        them to
-        [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
-        MQTT topics for the MQTT Broker
-    -   listen to the **MQTT Broker** on registered topics to send measurements northbound
--   The [Mosquitto](https://mosquitto.org/) **MQTT Broker** which acts as a central communication point, passing MQTT
-    topics between the **IoT Agent** and IoT devices as necessary.
--   The underlying [MongoDB](https://www.mongodb.com/) database :
-    -   Used by the **Orion Context Broker** to hold context data information such as data entities, subscriptions and
-        registrations
-    -   Used by the **IoT Agent** to hold device information such as device URLs and Keys
--   A webserver acting as set of [dummy IoT devices](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2) using
-    the
+- The FIWARE [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) which will receive requests using
+  [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
+- The FIWARE [IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/) which will:
+  - receive southbound requests using [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) and convert
+    them to
     [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
-    protocol running over MQTT.
--   The **Context Provider NGSI** proxy is not used in this tutorial. It does the following:
-    -   receive requests using [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
-    -   makes requests to publicly available data sources using their own APIs in a proprietary format
-    -   returns context data back to the Orion Context Broker in
-        [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) format.
--   The **Stock Management Frontend** is not used in this tutorial will it does the following:
-    -   Display store information
-    -   Show which products can be bought at each store
-    -   Allow users to "buy" products and reduce the stock count.
+    MQTT topics for the MQTT Broker
+  - listen to the **MQTT Broker** on registered topics to send measurements northbound
+- The [Mosquitto](https://mosquitto.org/) **MQTT Broker** which acts as a central communication point, passing MQTT
+  topics between the **IoT Agent** and IoT devices as necessary.
+- The underlying [MongoDB](https://www.mongodb.com/) database :
+  - Used by the **Orion Context Broker** to hold context data information such as data entities, subscriptions and
+    registrations
+  - Used by the **IoT Agent** to hold device information such as device URLs and Keys
+- A webserver acting as set of [dummy IoT devices](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2) using
+  the
+  [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+  protocol running over MQTT.
+- The **Context Provider NGSI** proxy is not used in this tutorial. It does the following:
+  - receive requests using [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
+  - makes requests to publicly available data sources using their own APIs in a proprietary format
+  - returns context data back to the Orion Context Broker in
+    [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) format.
+- The **Stock Management Frontend** is not used in this tutorial will it does the following:
+  - Display store information
+  - Show which products can be bought at each store
+  - Allow users to "buy" products and reduce the stock count.
 
 Since all interactions between the elements are initiated by HTTP or MQTT requests over TCP, the entities can be
 containerized and run from exposed ports.
@@ -160,25 +160,25 @@ be seen in the services section of the associated `docker-compose.yml` file:
 
 ```yaml
 mosquitto:
-    image: eclipse-mosquitto
-    hostname: mosquitto
-    container_name: mosquitto
-    networks:
-        - default
-    expose:
-        - '1883'
-        - '9001'
-    ports:
-        - '1883:1883'
-        - '9001:9001'
-    volumes:
-        - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+  image: eclipse-mosquitto
+  hostname: mosquitto
+  container_name: mosquitto
+  networks:
+    - default
+  expose:
+    - "1883"
+    - "9001"
+  ports:
+    - "1883:1883"
+    - "9001:9001"
+  volumes:
+    - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
 ```
 
 The `mosquitto` container is listening on two ports:
 
--   Port `1883` is exposed so we can post MQTT topics
--   Port `9001` is the standard port for HTTP/Websocket communications
+- Port `1883` is exposed so we can post MQTT topics
+- Port `9001` is the standard port for HTTP/Websocket communications
 
 The attached volume is a
 [configuration file](https://github.com/FIWARE/tutorials.IoT-over-MQTT/blob/master/mosquitto/mosquitto.conf) used to
@@ -188,30 +188,30 @@ increase the debug level of the MQTT Message Broker.
 
 ```yaml
 tutorial:
-    image: quay.io/fiware/tutorials.context-provider
-    hostname: iot-sensors
-    container_name: fiware-tutorial
-    networks:
-        - default
-    expose:
-        - '3000'
-        - '3001'
-    ports:
-        - '3000:3000'
-        - '3001:3001'
-    environment:
-        - 'DEBUG=tutorial:*'
-        - 'WEB_APP_PORT=3000'
-        - 'DUMMY_DEVICES_PORT=3001'
-        - 'DUMMY_DEVICES_API_KEY=4jggokgpepnvsb2uv4s40d59ov'
-        - 'DUMMY_DEVICES_TRANSPORT=MQTT'
+  image: quay.io/fiware/tutorials.context-provider
+  hostname: iot-sensors
+  container_name: fiware-tutorial
+  networks:
+    - default
+  expose:
+    - "3000"
+    - "3001"
+  ports:
+    - "3000:3000"
+    - "3001:3001"
+  environment:
+    - "DEBUG=tutorial:*"
+    - "WEB_APP_PORT=3000"
+    - "DUMMY_DEVICES_PORT=3001"
+    - "DUMMY_DEVICES_API_KEY=4jggokgpepnvsb2uv4s40d59ov"
+    - "DUMMY_DEVICES_TRANSPORT=MQTT"
 ```
 
 The `tutorial` container is listening on two ports:
 
--   Port `3000` is exposed so we can see the web page displaying the Dummy IoT devices.
--   Port `3001` is exposed purely for tutorial access - so that cUrl or Postman can make UltraLight commands without
-    being part of the same network.
+- Port `3000` is exposed so we can see the web page displaying the Dummy IoT devices.
+- Port `3001` is exposed purely for tutorial access - so that cUrl or Postman can make UltraLight commands without
+  being part of the same network.
 
 The `tutorial` container is driven by environment variables as shown:
 
@@ -233,39 +233,39 @@ tagged `fiware/iotagent-ul`. The necessary configuration can be seen below:
 
 ```yaml
 iot-agent:
-    image: quay.io/fiware/iotagent-ul:latest
-    hostname: iot-agent
-    container_name: fiware-iot-agent
-    depends_on:
-        - mongo-db
-    networks:
-        - default
-    expose:
-        - '4041'
-    ports:
-        - '4041:4041'
-    environment:
-        - IOTA_CB_HOST=orion
-        - IOTA_CB_PORT=1026
-        - IOTA_NORTH_PORT=4041
-        - IOTA_REGISTRY_TYPE=mongodb
-        - IOTA_LOG_LEVEL=DEBUG
-        - IOTA_TIMESTAMP=true
-        - IOTA_CB_NGSI_VERSION=v2
-        - IOTA_AUTOCAST=true
-        - IOTA_MONGO_HOST=mongo-db
-        - IOTA_MONGO_PORT=27017
-        - IOTA_MONGO_DB=iotagentul
-        - IOTA_PROVIDER_URL=http://iot-agent:4041
-        - IOTA_MQTT_HOST=mosquitto
-        - IOTA_MQTT_PORT=1883
+  image: quay.io/fiware/iotagent-ul:latest
+  hostname: iot-agent
+  container_name: fiware-iot-agent
+  depends_on:
+    - mongo-db
+  networks:
+    - default
+  expose:
+    - "4041"
+  ports:
+    - "4041:4041"
+  environment:
+    - IOTA_CB_HOST=orion
+    - IOTA_CB_PORT=1026
+    - IOTA_NORTH_PORT=4041
+    - IOTA_REGISTRY_TYPE=mongodb
+    - IOTA_LOG_LEVEL=DEBUG
+    - IOTA_TIMESTAMP=true
+    - IOTA_CB_NGSI_VERSION=v2
+    - IOTA_AUTOCAST=true
+    - IOTA_MONGO_HOST=mongo-db
+    - IOTA_MONGO_PORT=27017
+    - IOTA_MONGO_DB=iotagentul
+    - IOTA_PROVIDER_URL=http://iot-agent:4041
+    - IOTA_MQTT_HOST=mosquitto
+    - IOTA_MQTT_PORT=1883
 ```
 
 The `iot-agent` container relies on the presence of the Orion Context Broker and uses a MongoDB database to hold device
 information such as device URLs and Keys. The container is listening on a single port:
 
--   Port `4041` is exposed purely for tutorial access - so that cUrl or Postman can make provisioning commands without
-    being part of the same network.
+- Port `4041` is exposed purely for tutorial access - so that cUrl or Postman can make provisioning commands without
+  being part of the same network.
 
 The `iot-agent` container is driven by environment variables as shown:
 
@@ -296,9 +296,9 @@ As you can see, use of the MQTT transport is driven by only two environment vari
 To keep things simple all components will be run using [Docker](https://www.docker.com). **Docker** is a container
 technology which allows to different components isolated into their respective environments.
 
--   To install Docker on Windows follow the instructions [here](https://docs.docker.com/docker-for-windows/)
--   To install Docker on Mac follow the instructions [here](https://docs.docker.com/docker-for-mac/)
--   To install Docker on Linux follow the instructions [here](https://docs.docker.com/install/)
+- To install Docker on Windows follow the instructions [here](https://docs.docker.com/docker-for-windows/)
+- To install Docker on Mac follow the instructions [here](https://docs.docker.com/docker-for-mac/)
+- To install Docker on Linux follow the instructions [here](https://docs.docker.com/install/)
 
 **Docker Compose** is a tool for defining and running multi-container Docker applications. A
 [YAML file](https://raw.githubusercontent.com/Fiware/tutorials.IoT-over-MQTT/master/docker-compose.yml) is used
@@ -450,10 +450,10 @@ The response will look similar to the following:
 
 ```json
 {
-    "libVersion": "2.6.0-next",
-    "port": "4041",
-    "baseRoot": "/",
-    "version": "1.6.0-next"
+  "libVersion": "2.6.0-next",
+  "port": "4041",
+  "baseRoot": "/",
+  "version": "1.6.0-next"
 }
 ```
 
@@ -465,7 +465,7 @@ The response will look similar to the following:
 >
 > Try the following remedies:
 >
-> -   To check that the docker containers are running try the following:
+> - To check that the docker containers are running try the following:
 >
 > ```console
 > docker ps
@@ -474,9 +474,9 @@ The response will look similar to the following:
 > You should see four containers running. If the IoT Agent is not running, you can restart the containers as necessary.
 > This command will also display open port information.
 >
-> -   If you have installed [`docker-machine`](https://docs.docker.com/machine/) and
->     [Virtual Box](https://www.virtualbox.org/), the context broker, IoT Agent and Dummy Device docker containers may
->     be running from another IP address - you will need to retrieve the virtual host IP as shown:
+> - If you have installed [`docker-machine`](https://docs.docker.com/machine/) and
+>   [Virtual Box](https://www.virtualbox.org/), the context broker, IoT Agent and Dummy Device docker containers may
+>   be running from another IP address - you will need to retrieve the virtual host IP as shown:
 >
 > ```console
 > curl -X GET \
@@ -500,8 +500,8 @@ can be mapped to a known ID.
 There is no guarantee that every supplied IoT device `<device-id>` will always be unique, therefore all provisioning
 requests to the IoT Agent require two mandatory headers:
 
--   `fiware-service` header is defined so that entities for a given service can be held in a separate mongoDB database.
--   `fiware-servicepath` can be used to differentiate between arrays of devices.
+- `fiware-service` header is defined so that entities for a given service can be held in a separate mongoDB database.
+- `fiware-servicepath` can be used to differentiate between arrays of devices.
 
 For example within a smart city application you would expect different `fiware-service` headers for different
 departments (e.g. parks, transport, refuse collection etc.) and each `fiware-servicepath` would refer to specific park
@@ -526,8 +526,8 @@ communicating by sending device measures over the `/ul/4jggokgpepnvsb2uv4s40d59o
 
 > **Note** Measures and commands are sent over different MQTT topics:
 >
-> -   _Measures_ are sent on the `/<protocol>/<api-key>/<device-id>/attrs` topic
-> -   _Commands_ are sent on the `/<api-key>/<device-id>/cmd` topic
+> - _Measures_ are sent on the `/<protocol>/<api-key>/<device-id>/attrs` topic
+> - _Commands_ are sent on the `/<api-key>/<device-id>/cmd` topic
 >
 > The reasoning behind this is that when sending measures northbound from device to IoT Agent, it is necessary to
 > explicitly identify which IoT Agent is needed to parse the data. This is done by prefixing the relevant MQTT topic
@@ -570,10 +570,10 @@ defined by provisioning a device individually.
 
 Three types of measurement attributes can be provisioned:
 
--   `attributes` are active readings from the device
--   `lazy` attributes are only sent on request - The IoT Agent will inform the device to return the measurement
--   `static_attributes` are as the name suggests static data about the device (such as relationships) passed on to the
-    context broker.
+- `attributes` are active readings from the device
+- `lazy` attributes are only sent on request - The IoT Agent will inform the device to return the measurement
+- `static_attributes` are as the name suggests static data about the device (such as relationships) passed on to the
+  context broker.
 
 > **Note**: in the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can
 > be defined within the provisioning service rather than individually.
@@ -596,7 +596,7 @@ curl -iX POST \
      "transport":   "MQTT",
      "timezone":    "Europe/Berlin",
      "attributes": [
-       { "object_id": "c", "name": "count", "type": "Integer" }
+       { "object_id": "c", "name": "count", "type": "Number" }
      ],
      "static_attributes": [
        { "name":"refStore", "type": "Relationship", "value": "urn:ngsi-ld:Store:001"}
@@ -608,7 +608,7 @@ curl -iX POST \
 ```
 
 In the request we are associating the device `motion001` with the URN `urn:ngsi-ld:Motion:001` and mapping the device
-reading `c` with the context attribute `count` (which is defined as an `Integer`) A `refStore` is defined as a
+reading `c` with the context attribute `count` (which is defined as an `Number`) A `refStore` is defined as a
 `static_attribute`, placing the device within **Store** `urn:ngsi-ld:Store:001`.
 
 The addition of the `transport=MQTT` attribute in the body of the request is sufficient to tell the IoT Agent that it
@@ -625,8 +625,8 @@ docker run -it --rm --name mqtt-publisher --network \
   -t "/ul/4jggokgpepnvsb2uv4s40d59ov/motion001/attrs"
 ```
 
--   The value of the `-m` parameter defines the message. This is in UltraLight syntax.
--   The value of the `-t` parameter defines the **topic**.
+- The value of the `-m` parameter defines the message. This is in UltraLight syntax.
+- The value of the `-t` parameter defines the **topic**.
 
 The **topic** must be in the following form:
 
@@ -665,23 +665,23 @@ curl -X GET \
 
 ```json
 {
-    "id": "urn:ngsi-ld:Motion:001",
-    "type": "Motion",
-    "TimeInstant": {
+  "id": "urn:ngsi-ld:Motion:001",
+  "type": "Motion",
+  "TimeInstant": {
+    "type": "ISO8601",
+    "value": "2018-05-25T10:51:32.00Z",
+    "metadata": {}
+  },
+  "count": {
+    "type": "Number",
+    "value": "1",
+    "metadata": {
+      "TimeInstant": {
         "type": "ISO8601",
-        "value": "2018-05-25T10:51:32.00Z",
-        "metadata": {}
-    },
-    "count": {
-        "type": "Integer",
-        "value": "1",
-        "metadata": {
-            "TimeInstant": {
-                "type": "ISO8601",
-                "value": "2018-05-25T10:51:32.646Z"
-            }
-        }
+        "value": "2018-05-25T10:51:32.646Z"
+      }
     }
+  }
 }
 ```
 
@@ -777,13 +777,13 @@ curl -X GET \
 
 ```json
 {
-    "id": "urn:ngsi-ld:Bell:001",
-    "type": "Bell",
-    "TimeInstant": "2018-05-25T20:06:28.00Z",
-    "refStore": "urn:ngsi-ld:Store:001",
-    "ring_info": " ring OK",
-    "ring_status": "OK",
-    "ring": ""
+  "id": "urn:ngsi-ld:Bell:001",
+  "type": "Bell",
+  "TimeInstant": "2018-05-25T20:06:28.00Z",
+  "refStore": "urn:ngsi-ld:Store:001",
+  "ring_info": " ring OK",
+  "ring_status": "OK",
+  "ring": ""
 }
 ```
 
@@ -859,7 +859,7 @@ curl -iX POST \
        ],
        "attributes": [
         {"object_id": "s", "name": "state", "type":"Text"},
-        {"object_id": "l", "name": "luminosity", "type":"Integer"}
+        {"object_id": "l", "name": "luminosity", "type":"Number"}
        ],
        "static_attributes": [
          {"name":"refStore", "type": "Relationship","value": "urn:ngsi-ld:Store:001"}
@@ -980,5 +980,5 @@ the other [tutorials in this series](https://fiware-tutorials.rtfd.io)
 
 <a name="footnote1"></a>
 
--   [Wikipedia: MQTT](https://en.wikipedia.org/wiki/MQTT) - a central communication point (known as the MQTT broker)
-    which is in charge of dispatching all messages between services
+- [Wikipedia: MQTT](https://en.wikipedia.org/wiki/MQTT) - a central communication point (known as the MQTT broker)
+  which is in charge of dispatching all messages between services

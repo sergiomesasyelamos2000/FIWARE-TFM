@@ -68,7 +68,7 @@ curl -s -o /dev/null -X POST \
 #                 {
 #                     "object_id": "activo",
 #                     "name": "activo",
-#                     "type": "Integer"
+#                     "type": "Number"
 #                 }
 #             ],
 #             "static_attributes": [
@@ -105,7 +105,7 @@ curl -s -o /dev/null -X POST \
                 {
                     "object_id": "activo",
                     "name": "activo",
-                    "type": "Integer"
+                    "type": "Number"
                 },
                 {
                     "object_id": "tipo_sensor",
@@ -141,22 +141,22 @@ curl -s -o /dev/null -X POST \
 #                 {
 #                     "object_id": "x1",
 #                     "name": "x1",
-#                     "type": "Integer"
+#                     "type": "Number"
 #                 },
 #                 {
 #                     "object_id": "x2",
 #                     "name": "x2",
-#                     "type": "Integer"
+#                     "type": "Number"
 #                 },
 #                 {
 #                     "object_id": "y1",
 #                     "name": "y1",
-#                     "type": "Integer"
+#                     "type": "Number"
 #                 },
 #                 {
 #                     "object_id": "y2",
 #                     "name": "y2",
-#                     "type": "Integer"
+#                     "type": "Number"
 #                 },
 #                 {
 #                     "object_id": "uncertain",
@@ -199,22 +199,22 @@ curl -s -o /dev/null -X POST \
                 {
                     "object_id": "x1",
                     "name": "x1",
-                    "type": "Integer"
+                    "type": "Number"
                 },
                 {
                     "object_id": "x2",
                     "name": "x2",
-                    "type": "Integer"
+                    "type": "Number"
                 },
                 {
                     "object_id": "y1",
                     "name": "y1",
-                    "type": "Integer"
+                    "type": "Number"
                 },
                 {
                     "object_id": "y2",
                     "name": "y2",
-                    "type": "Integer"
+                    "type": "Number"
                 },
                 {
                     "object_id": "uncertain",

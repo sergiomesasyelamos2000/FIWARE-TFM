@@ -8,7 +8,6 @@
 <br/> [![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
 
 <!-- prettier-ignore -->
-
 このチュートリアルでは、FIWARE に接続する IoT デバイスでの MQTT プロトコルの使用
 を紹介します
 。[以前のチュートリアル](https://github.com/FIWARE/tutorials.IoT-Agent) で作成し
@@ -25,33 +24,33 @@ IoT Agent は、[Mosquitto](https://mosquitto.org/) message broker を介して 
 <details>
 <summary>詳細 <b>(クリックして拡大)</b></summary>
 
--   [MQTT とは何ですか？](#what-is-mqtt)
--   [アーキテクチャ](#architecture)
-    -   [Mosquitto の設定](#mosquitto-configuration)
-    -   [ダミー IoT デバイスの設定](#dummy-iot-devices-configuration)
-    -   [IoT Agent for UltraLight 2.0 の設定](#iot-agent-for-ultralight-20-configuration)
--   [前提条件](#prerequisites)
-    -   [Docker と Docker Compose](#docker-and-docker-compose)
-    -   [Cygwin for Windows](#cygwin-for-windows)
--   [起動](#start-up)
--   [IoT Agent のプロビジョニング (Ultra Light over MQTT)](#provisioning-an-iot-agent-ultralight-over-mqtt)
-    -   [Mosquitto Health の確認](#checking-mosquitto-health)
-        -   [MQTT サブスクライバを開始 (:one:st ターミナル)](#start-an-mqtt-subscriber-onest-terminal)
-        -   [MQTT パブリッシャを開始 (:two:nd ターミナル)](#start-an-mqtt-publisher-twond-terminal)
-        -   [MQTT サブスクライバを停止 (:one:st ターミナル)](#stop-an-mqtt-subscriber-onest-terminal)
-        -   [Mosquitto ログを表示](#show-mosquitto-log)
-    -   [IoT Agent Service Health の確認](#checking-the-iot-agent-service-health)
-    -   [IoT デバイスの接続](#connecting-iot-devices)
-        -   [MQTT のサービス・グループのプロビジョニング](#provisioning-a-service-group-for-mqtt)
-        -   [センサのプロビジョニング](#provisioning-a-sensor)
-        -   [アクチュエータのプロビジョニング](#provisioning-an-actuator)
-        -   [スマート・ドアのプロビジョニング](#provisioning-a-smart-door)
-        -   [スマート・ランプのプロビジョニング](#provisioning-a-smart-lamp)
-    -   [Context Broker コマンドの有効化](#enabling-context-broker-commands)
-        -   [ベルを鳴らす](#ringing-the-bell)
-        -   [スマート・ドアを開く](#opening-the-smart-door)
-        -   [スマート・ランプの電源をオン](#switching-on-the-smart-lamp)
--   [次のステップ](#next-steps)
+- [MQTT とは何ですか？](#what-is-mqtt)
+- [アーキテクチャ](#architecture)
+  - [Mosquitto の設定](#mosquitto-configuration)
+  - [ダミー IoT デバイスの設定](#dummy-iot-devices-configuration)
+  - [IoT Agent for UltraLight 2.0 の設定](#iot-agent-for-ultralight-20-configuration)
+- [前提条件](#prerequisites)
+  - [Docker と Docker Compose](#docker-and-docker-compose)
+  - [Cygwin for Windows](#cygwin-for-windows)
+- [起動](#start-up)
+- [IoT Agent のプロビジョニング (Ultra Light over MQTT)](#provisioning-an-iot-agent-ultralight-over-mqtt)
+  - [Mosquitto Health の確認](#checking-mosquitto-health)
+    - [MQTT サブスクライバを開始 (:one:st ターミナル)](#start-an-mqtt-subscriber-onest-terminal)
+    - [MQTT パブリッシャを開始 (:two:nd ターミナル)](#start-an-mqtt-publisher-twond-terminal)
+    - [MQTT サブスクライバを停止 (:one:st ターミナル)](#stop-an-mqtt-subscriber-onest-terminal)
+    - [Mosquitto ログを表示](#show-mosquitto-log)
+  - [IoT Agent Service Health の確認](#checking-the-iot-agent-service-health)
+  - [IoT デバイスの接続](#connecting-iot-devices)
+    - [MQTT のサービス・グループのプロビジョニング](#provisioning-a-service-group-for-mqtt)
+    - [センサのプロビジョニング](#provisioning-a-sensor)
+    - [アクチュエータのプロビジョニング](#provisioning-an-actuator)
+    - [スマート・ドアのプロビジョニング](#provisioning-a-smart-door)
+    - [スマート・ランプのプロビジョニング](#provisioning-a-smart-lamp)
+  - [Context Broker コマンドの有効化](#enabling-context-broker-commands)
+    - [ベルを鳴らす](#ringing-the-bell)
+    - [スマート・ドアを開く](#opening-the-smart-door)
+    - [スマート・ランプの電源をオン](#switching-on-the-smart-lamp)
+- [次のステップ](#next-steps)
 
 </details>
 
@@ -136,46 +135,46 @@ Context Broker と IoT Agent はオープンソースの
 
 したがって、全体的なアーキテクチャは次の要素で構成されます :
 
--   FIWARE
-    [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) は
-    、[NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用して
-    リクエストを受信します
--   FIWARE
-    [IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/)
-    は以下を行います :
-    -   [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用し
-        てサウス・バウンド・リクエストを受信し、MQTT Broker 用の
-        [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
-        の**トピック**に変換します
-    -   登録された**トピック**について **MQTT Broker** をリッスンし、測定値をノ
-        ース・バウンドに送信します
--   [Mosquitto](https://mosquitto.org/) **MQTT Broker** は、必要に応じて MQTT ト
-    ピックを IoT Agent と IoT デ バイスの間でやりとりする中央通信ポイントとして
-    機能します
--   [MongoDB](https://www.mongodb.com/) データベース :
-    -   **Orion Context Broker** が、データ・エンティティ、サブスクリプション、
-        レジストレーションなどのコンテキスト・データ情報を保持するために使用しま
-        す
-    -   **IoT Agent** がデバイスの URLs や Keys などのデバイス情報を保持するため
-        に使用します
--   MQTT 上で動作する
+- FIWARE
+  [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) は
+  、[NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用して
+  リクエストを受信します
+- FIWARE
+  [IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/)
+  は以下を行います :
+  - [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用し
+    てサウス・バウンド・リクエストを受信し、MQTT Broker 用の
     [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
-    プロトコルを使用して
-    、[ダミー IoT デバイス](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2)のセ
-    ットとして機能する Web サーバー
--   このチュートリアルでは、**コンテキスト・プロバイダの NGSI proxy** は使用しま
-    せん。これは以下を行います :
-    -   [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用し
-        てリクエストを受信します
-    -   独自の API を独自のフォーマットで使用して、公開されているデータ・ソース
-        へのリクエストを行います
-    -   [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) 形式でコ
-        ンテキスト・データ を Orion Context Broker に返します
--   **在庫管理フロントエンド**は、このチュートリアルで使用していません。これは以
-    下を行います :
-    -   店舗情報を表示し、ユーザーがダミー IoT デバイスと対話できるようにします
-    -   各店舗で購入できる商品を表示します
-    -   ユーザが製品を購入して在庫数を減らすことを許可します
+    の**トピック**に変換します
+  - 登録された**トピック**について **MQTT Broker** をリッスンし、測定値をノ
+    ース・バウンドに送信します
+- [Mosquitto](https://mosquitto.org/) **MQTT Broker** は、必要に応じて MQTT ト
+  ピックを IoT Agent と IoT デ バイスの間でやりとりする中央通信ポイントとして
+  機能します
+- [MongoDB](https://www.mongodb.com/) データベース :
+  - **Orion Context Broker** が、データ・エンティティ、サブスクリプション、
+    レジストレーションなどのコンテキスト・データ情報を保持するために使用しま
+    す
+  - **IoT Agent** がデバイスの URLs や Keys などのデバイス情報を保持するため
+    に使用します
+- MQTT 上で動作する
+  [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+  プロトコルを使用して
+  、[ダミー IoT デバイス](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2)のセ
+  ットとして機能する Web サーバー
+- このチュートリアルでは、**コンテキスト・プロバイダの NGSI proxy** は使用しま
+  せん。これは以下を行います :
+  - [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用し
+    てリクエストを受信します
+  - 独自の API を独自のフォーマットで使用して、公開されているデータ・ソース
+    へのリクエストを行います
+  - [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) 形式でコ
+    ンテキスト・データ を Orion Context Broker に返します
+- **在庫管理フロントエンド**は、このチュートリアルで使用していません。これは以
+  下を行います :
+  - 店舗情報を表示し、ユーザーがダミー IoT デバイスと対話できるようにします
+  - 各店舗で購入できる商品を表示します
+  - ユーザが製品を購入して在庫数を減らすことを許可します
 
 要素間のすべての対話は TCP を介して HTTP または MQTT リクエストによって開始され
 るため、エンティティはコンテナ化され、公開されたポートから実行されます。
@@ -191,25 +190,25 @@ Mosquitto MQTT Broker, IoT デバイス, IoT Agent を接続するために必�
 
 ```yaml
 mosquitto:
-    image: eclipse-mosquitto
-    hostname: mosquitto
-    container_name: mosquitto
-    networks:
-        - default
-    expose:
-        - "1883"
-        - "9001"
-    ports:
-        - "1883:1883"
-        - "9001:9001"
-    volumes:
-        - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+  image: eclipse-mosquitto
+  hostname: mosquitto
+  container_name: mosquitto
+  networks:
+    - default
+  expose:
+    - "1883"
+    - "9001"
+  ports:
+    - "1883:1883"
+    - "9001:9001"
+  volumes:
+    - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
 ```
 
 `mosquitto` コンテナは、2 つのポートでリッスンしています :
 
--   ポート `1883` は、MQTT の**トピック**をポストできるように公開されています
--   ポート `9001` は、HTTP/Websocket 通信の標準ポートです
+- ポート `1883` は、MQTT の**トピック**をポストできるように公開されています
+- ポート `9001` は、HTTP/Websocket 通信の標準ポートです
 
 volumes の設定は、MQTT message broker のデバッグ・レベルを上げるために使用され
 る[設定ファイル](https://github.com/FIWARE/tutorials.IoT-over-MQTT/blob/NGSI-v2/mosquitto/mosquitto.conf)で
@@ -221,32 +220,32 @@ volumes の設定は、MQTT message broker のデバッグ・レベルを上げ�
 
 ```yaml
 tutorial:
-    image: quay.io/fiware/tutorials.context-provider
-    hostname: iot-sensors
-    container_name: fiware-tutorial
-    networks:
-        - default
-    expose:
-        - "3000"
-        - "3001"
-    ports:
-        - "3000:3000"
-        - "3001:3001"
-    environment:
-        - "DEBUG=tutorial:*"
-        - "WEB_APP_PORT=3000"
-        - "DUMMY_DEVICES_PORT=3001"
-        - "DUMMY_DEVICES_API_KEY=4jggokgpepnvsb2uv4s40d59ov"
-        - "DUMMY_DEVICES_TRANSPORT=MQTT"
+  image: quay.io/fiware/tutorials.context-provider
+  hostname: iot-sensors
+  container_name: fiware-tutorial
+  networks:
+    - default
+  expose:
+    - "3000"
+    - "3001"
+  ports:
+    - "3000:3000"
+    - "3001:3001"
+  environment:
+    - "DEBUG=tutorial:*"
+    - "WEB_APP_PORT=3000"
+    - "DUMMY_DEVICES_PORT=3001"
+    - "DUMMY_DEVICES_API_KEY=4jggokgpepnvsb2uv4s40d59ov"
+    - "DUMMY_DEVICES_TRANSPORT=MQTT"
 ```
 
 `tutorial` コンテナは、2 つのポートでリッスンしています :
 
--   ポート `3000` が公開されているので、ダミー IoT デバイスを表示する Web ページ
-    が表示されます
--   ポート `3001` はチュートリアルのアクセスのためだけに公開されているため、cUrl
-    または Postman は同じネットワーク以外からも、UltraLight コマンドを作成できま
-    す
+- ポート `3000` が公開されているので、ダミー IoT デバイスを表示する Web ページ
+  が表示されます
+- ポート `3001` はチュートリアルのアクセスのためだけに公開されているため、cUrl
+  または Postman は同じネットワーク以外からも、UltraLight コマンドを作成できま
+  す
 
 `tutorial` コンテナは、次のように環境変数によって設定値を指定できます :
 
@@ -271,53 +270,53 @@ Hub からタグ付けされた `fiware/iotagent-ul` です。必要な構成を
 
 ```yaml
 iot-agent:
-    image: quay.io/fiware/iotagent-ul:latest
-    hostname: iot-agent
-    container_name: fiware-iot-agent
-    depends_on:
-        - mongo-db
-    networks:
-        - default
-    expose:
-        - "4041"
-    ports:
-        - "4041:4041"
-    environment:
-        - IOTA_CB_HOST=orion
-        - IOTA_CB_PORT=1026
-        - IOTA_NORTH_PORT=4041
-        - IOTA_REGISTRY_TYPE=mongodb
-        - IOTA_LOG_LEVEL=DEBUG
-        - IOTA_TIMESTAMP=true
-        - IOTA_CB_NGSI_VERSION=v2
-        - IOTA_AUTOCAST=true
-        - IOTA_MONGO_HOST=mongo-db
-        - IOTA_MONGO_PORT=27017
-        - IOTA_MONGO_DB=iotagentul
-        - IOTA_PROVIDER_URL=http://iot-agent:4041
-        - IOTA_MQTT_HOST=mosquitto
-        - IOTA_MQTT_PORT=1883
+  image: quay.io/fiware/iotagent-ul:latest
+  hostname: iot-agent
+  container_name: fiware-iot-agent
+  depends_on:
+    - mongo-db
+  networks:
+    - default
+  expose:
+    - "4041"
+  ports:
+    - "4041:4041"
+  environment:
+    - IOTA_CB_HOST=orion
+    - IOTA_CB_PORT=1026
+    - IOTA_NORTH_PORT=4041
+    - IOTA_REGISTRY_TYPE=mongodb
+    - IOTA_LOG_LEVEL=DEBUG
+    - IOTA_TIMESTAMP=true
+    - IOTA_CB_NGSI_VERSION=v2
+    - IOTA_AUTOCAST=true
+    - IOTA_MONGO_HOST=mongo-db
+    - IOTA_MONGO_PORT=27017
+    - IOTA_MONGO_DB=iotagentul
+    - IOTA_PROVIDER_URL=http://iot-agent:4041
+    - IOTA_MQTT_HOST=mosquitto
+    - IOTA_MQTT_PORT=1883
 ```
 
 `iot-agent` コンテナは、Orion Context Broker の 存在に依存し、そのようなデバイス
 の URLs 及び Keys としてデバイス情報を保持するために MongoDB データベースを使用
 します。コンテナは 1 つのポートで待機しています :
 
--   ポート 4041 は、チュートリアルのアクセスのためだけに公開されているため、cUrl
-    または Postman は同じネットワーク以外からも、プロビジョニング・コマンドを作
-    成できます
+- ポート 4041 は、チュートリアルのアクセスのためだけに公開されているため、cUrl
+  または Postman は同じネットワーク以外からも、プロビジョニング・コマンドを作
+  成できます
 
 `iot-agent` コンテナは、次のように環境変数によって設定値を指定できます :
 
 | キー                 | 値                      | 説明                                                                                                                                   |
-| ------------------   | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| -------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | IOTA_CB_HOST         | `orion`                 | コンテキストを更新する Context Broker のホスト名                                                                                       |
 | IOTA_CB_PORT         | `1026`                  | Context Broker がコンテキストを更新するためにリッスンするポート                                                                        |
 | IOTA_NORTH_PORT      | `4041`                  | IoT Agent の設定および Context Broker からのコンテキスト更新の受信に使用されるポート                                                   |
 | IOTA_REGISTRY_TYPE   | `mongodb`               | メモリまたはデータベースに IoT デバイス情報を保持するかどうかを指定                                                                    |
 | IOTA_LOG_LEVEL       | `DEBUG`                 | IoT Agent のログ・レベル                                                                                                               |
 | IOTA_TIMESTAMP       | `true`                  | 接続されたデバイスから受信した各測定値にタイムスタンプ情報を提供するかどうかを指定                                                     |
-| IOTA_CB_NGSI_VERSION | `v2`                    | アクティブな属性の更新を送信するときにNGSI v2 を使用するように指定するかどうか                                                         |
+| IOTA_CB_NGSI_VERSION | `v2`                    | アクティブな属性の更新を送信するときに NGSI v2 を使用するように指定するかどうか                                                        |
 | IOTA_AUTOCAST        | `true`                  | Ultralight の数値が文字列ではなく数値として読み取られるようにする                                                                      |
 | IOTA_MONGO_HOST      | `context-db`            | mongoDB のホスト名 - デバイス情報を保持するために使用                                                                                  |
 | IOTA_MONGO_PORT      | `27017`                 | mongoDB はリッスンしているポート                                                                                                       |
@@ -341,13 +340,13 @@ iot-agent:
 を使用して実行されます。**Docker** は、さまざまコンポーネントをそれぞれの環境に
 分離することを可能にするコンテナ・テクノロジです。
 
--   Docker Windows にインストールするには
-    、[こちら](https://docs.docker.com/docker-for-windows/)の手順に従ってくださ
-    い
--   Docker Mac にインストールするには
-    、[こちら](https://docs.docker.com/docker-for-mac/)の手順に従ってください
--   Docker Linux にインストールするには
-    、[こちら](https://docs.docker.com/install/)の手順に従ってください
+- Docker Windows にインストールするには
+  、[こちら](https://docs.docker.com/docker-for-windows/)の手順に従ってくださ
+  い
+- Docker Mac にインストールするには
+  、[こちら](https://docs.docker.com/docker-for-mac/)の手順に従ってください
+- Docker Linux にインストールするには
+  、[こちら](https://docs.docker.com/install/)の手順に従ってください
 
 **Docker Compose** は、マルチコンテナ Docker アプリケーションを定義して実行する
 ためのツールです
@@ -533,10 +532,10 @@ curl -X GET \
 
 ```json
 {
-    "libVersion": "2.6.0-next",
-    "port": "4041",
-    "baseRoot": "/",
-    "version": "1.6.0-next"
+  "libVersion": "2.6.0-next",
+  "port": "4041",
+  "baseRoot": "/",
+  "version": "1.6.0-next"
 }
 ```
 
@@ -550,7 +549,7 @@ curl -X GET \
 >
 > 以下の対策を試してください :
 >
-> -   Docker コンテナが動作していることを確認するには、次のようにしてください :
+> - Docker コンテナが動作していることを確認するには、次のようにしてください :
 >
 > ```console
 > docker ps
@@ -560,11 +559,11 @@ curl -X GET \
 > 要に応じてコンテナを再起動できます。このコマンドは、開いているポート情報も表示
 > します
 >
-> -   [`docker-machine`](https://docs.docker.com/machine/) と
->     [Virtual Box](https://www.virtualbox.org/) をインストールしている場合は
->     、Context Broker, IoT Agent および ダミー IoT デバイスの Docker コンテナが
->     別の IP アドレスで実行されている可能性があります。次に示すように仮想ホスト
->     IP を取得する必要があります :
+> - [`docker-machine`](https://docs.docker.com/machine/) と
+>   [Virtual Box](https://www.virtualbox.org/) をインストールしている場合は
+>   、Context Broker, IoT Agent および ダミー IoT デバイスの Docker コンテナが
+>   別の IP アドレスで実行されている可能性があります。次に示すように仮想ホスト
+>   IP を取得する必要があります :
 >
 > ```console
 > curl -X GET \
@@ -592,9 +591,9 @@ IoT Agent は、IoT デバイスと Context Broker との間のミドルウェ�
 Agent へのすべてのプロビジョニングのリクエストには、2 つの必須ヘッダーが必要です
 :
 
--   `fiware-service` ヘッダは、特定のサービスのエンティティを別の mongoDB データ
-    ベースに保持できるように定義されています
--   `fiware-servicepath` は、デバイスのアレイを区別するために使用できます
+- `fiware-service` ヘッダは、特定のサービスのエンティティを別の mongoDB データ
+  ベースに保持できるように定義されています
+- `fiware-servicepath` は、デバイスのアレイを区別するために使用できます
 
 たとえば、スマート・シティのアプリケーションでは、さまざまな部門 (公演、交通機関
 、ごみ収集など) ごとに異なる `fiware-service` ヘッダが必要であり、それぞれ
@@ -626,8 +625,8 @@ Agent へのすべてのプロビジョニングのリクエストには、2 つ
 
 > **注** 測定値とコマンドは、さまざまな MQTT トピックを介して送信されます:
 >
-> *   _Measures_ は `/<protocol>/<api-key>/<device-id>/attrs` トピックで送信されます
-> *   _Commands_ は `/<api-key>/<device-id>/cmd` トピックで送信されます
+> - _Measures_ は `/<protocol>/<api-key>/<device-id>/attrs` トピックで送信されます
+> - _Commands_ は `/<api-key>/<device-id>/cmd` トピックで送信されます
 >
 > この背後にある理由は、デバイスから IoT Agent にノースバウンドで測定値を送信する場合、データを
 > 解析するために必要な IoT Agent を明示的に識別する必要があるためです。これは、関連する MQTT
@@ -675,11 +674,11 @@ curl -iX POST \
 
 3 つのタイプの測定属性をプロビジョニングできます :
 
--   `attributes` は、デバイスからのアクティブな読み取りです
--   `lazy` 属性はリクエストに応じて送信されます。IoT Agent は測定結果を返すよう
-    にデバイスに通知します
--   `static_attributes` は、Context Broker に渡されるデバイスに関する静的なデー
-    タ(リレーションシップなど)を示す名前です
+- `attributes` は、デバイスからのアクティブな読み取りです
+- `lazy` 属性はリクエストに応じて送信されます。IoT Agent は測定結果を返すよう
+  にデバイスに通知します
+- `static_attributes` は、Context Broker に渡されるデバイスに関する静的なデー
+  タ(リレーションシップなど)を示す名前です
 
 > **注 :** 個別 id が必要でないか、または集約されたデータが十分である場合は
 > 、`attributes` は個別にではなくプロビジョニング・サービス内で定義できます。
@@ -702,7 +701,7 @@ curl -iX POST \
      "transport":   "MQTT",
      "timezone":    "Europe/Berlin",
      "attributes": [
-       { "object_id": "c", "name": "count", "type": "Integer" }
+       { "object_id": "c", "name": "count", "type": "Number" }
      ],
      "static_attributes": [
        { "name":"refStore", "type": "Relationship", "value": "urn:ngsi-ld:Store:001"}
@@ -714,7 +713,7 @@ curl -iX POST \
 ```
 
 リクエストでは、デバイス `motion001` を URN `urn:ngsi-ld:Motion:001` に関連付け
-、コンテキスト属性 `ccount` (これは `Integer` と定義されています) を持つ デバイ
+、コンテキスト属性 `ccount` (これは `Number` と定義されています) を持つ デバイ
 ス読み込み `c` をマッピングします。`refStore` は `static_attribute` として定義さ
 れ、デバイスを **Store** `urn:ngsi-ld:Store:001` 内に配置します。
 
@@ -733,9 +732,9 @@ docker run -it --rm --name mqtt-publisher --network \
   -t "/ul/4jggokgpepnvsb2uv4s40d59ov/motion001/attrs"
 ```
 
--   `-m`パラメータの値によってメッセージが定義されます。これは Ultra Light の構
-    文です
--   `-t` パラメータの値によって**トピック**が定義されます
+- `-m`パラメータの値によってメッセージが定義されます。これは Ultra Light の構
+  文です
+- `-t` パラメータの値によって**トピック**が定義されます
 
 **トピック**は、次の形式でなければなりません :
 
@@ -779,23 +778,23 @@ curl -X GET \
 
 ```json
 {
-    "id": "urn:ngsi-ld:Motion:001",
-    "type": "Motion",
-    "TimeInstant": {
+  "id": "urn:ngsi-ld:Motion:001",
+  "type": "Motion",
+  "TimeInstant": {
+    "type": "ISO8601",
+    "value": "2018-05-25T10:51:32.00Z",
+    "metadata": {}
+  },
+  "count": {
+    "type": "Number",
+    "value": "1",
+    "metadata": {
+      "TimeInstant": {
         "type": "ISO8601",
-        "value": "2018-05-25T10:51:32.00Z",
-        "metadata": {}
-    },
-    "count": {
-        "type": "Integer",
-        "value": "1",
-        "metadata": {
-            "TimeInstant": {
-                "type": "ISO8601",
-                "value": "2018-05-25T10:51:32.646Z"
-            }
-        }
+        "value": "2018-05-25T10:51:32.646Z"
+      }
     }
+  }
 }
 ```
 
@@ -899,13 +898,13 @@ curl -X GET \
 
 ```json
 {
-    "id": "urn:ngsi-ld:Bell:001",
-    "type": "Bell",
-    "TimeInstant": "2018-05-25T20:06:28.00Z",
-    "refStore": "urn:ngsi-ld:Store:001",
-    "ring_info": " ring OK",
-    "ring_status": "OK",
-    "ring": ""
+  "id": "urn:ngsi-ld:Bell:001",
+  "type": "Bell",
+  "TimeInstant": "2018-05-25T20:06:28.00Z",
+  "refStore": "urn:ngsi-ld:Store:001",
+  "ring_info": " ring OK",
+  "ring_status": "OK",
+  "ring": ""
 }
 ```
 
@@ -987,7 +986,7 @@ curl -iX POST \
        ],
        "attributes": [
         {"object_id": "s", "name": "state", "type":"Text"},
-        {"object_id": "l", "name": "luminosity", "type":"Integer"}
+        {"object_id": "l", "name": "luminosity", "type":"Number"}
        ],
        "static_attributes": [
          {"name":"refStore", "type": "Relationship","value": "urn:ngsi-ld:Store:001"}
@@ -1128,5 +1127,5 @@ curl -iX PATCH \
 
 <a name="footnote1"></a>
 
--   [Wikipedia: MQTT](https://en.wikipedia.org/wiki/MQTT) - サービス間のすべての
-メッセージのディスパッチを担当する MQTT ブローカーと呼ばれる中央通信ポイント
+- [Wikipedia: MQTT](https://en.wikipedia.org/wiki/MQTT) - サービス間のすべての
+  メッセージのディスパッチを担当する MQTT ブローカーと呼ばれる中央通信ポイント

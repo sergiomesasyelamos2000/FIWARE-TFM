@@ -177,7 +177,7 @@ services:
   grafana:
     labels:
       org.fiware: 'tutorial'
-    image: grafana/grafana:8.5.27
+    image: grafana/grafana:latest
     container_name: grafana
     depends_on:
       - crate-db
