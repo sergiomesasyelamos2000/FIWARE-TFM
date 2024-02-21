@@ -186,6 +186,9 @@ services:
     environment:
       - GF_INSTALL_PLUGINS=orchestracities-map-panel,grafana-clock-panel,grafana-worldmap-panel
       - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
     volumes:
       - grafana:/var/lib/grafana
       
