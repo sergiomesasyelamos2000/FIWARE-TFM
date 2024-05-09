@@ -1,29 +1,8 @@
-# WARNING: Do not deploy this tutorial configuration directly to a production environment
-#
-# The tutorial docker-compose files have not been written for production deployment and will not
-# scale. A proper architecture has been sacrificed to keep the narrative focused on the learning
-# goals, they are just used to deploy everything onto a single Docker machine. All FIWARE components
-# are running at full debug and extra ports have been exposed to allow for direct calls to services.
-# They also contain various obvious security flaws - passwords in plain text, no load balancing,
-# no use of HTTPS and so on.
-#
-# This is all to avoid the need of multiple machines, generating certificates, encrypting secrets
-# and so on, purely so that a single docker-compose file can be read as an example to build on,
-# not use directly.
-#
-# When deploying to a production environment, please refer to the Helm Repository
-# for FIWARE Components in order to scale up to a proper architecture:
-#
-# see: https://github.com/FIWARE/helm-charts/
-#
 version: "3.8"
 services:
   # Orion is the context broker
   orion:
-    labels:
-      org.fiware: "tutorial"
     image: fiware/orion:${ORION_VERSION}
-    # image: telefonicaiot/fiware-orion:issue3884
     hostname: orion
     container_name: fiware-orion
     depends_on:
@@ -33,7 +12,7 @@ services:
     expose:
       - "${ORION_PORT}"
     ports:
-      - "${ORION_PORT}:${ORION_PORT}" # localhost:1026
+      - "${ORION_PORT}:${ORION_PORT}"
     command: -dbhost mongo-db -logLevel DEBUG
     healthcheck:
       test: curl --fail -s http://orion:${ORION_PORT}/version || exit 1
@@ -71,8 +50,7 @@ services:
     expose:
       - "${IOTA_NORTH_PORT}"
     ports:
-      - "${IOTA_NORTH_PORT}:${IOTA_NORTH_PORT}" # localhost:4041
-      #- "${IOTA_SOUTH_PORT}:${IOTA_SOUTH_PORT}" # localhost:7896
+      - "${IOTA_NORTH_PORT}:${IOTA_NORTH_PORT}"
     environment:
       - IOTA_CB_HOST=orion # name of the context broker to update context
       - IOTA_CB_PORT=${ORION_PORT} # port the context broker listens on to update context
@@ -95,15 +73,13 @@ services:
 
   # Databases
   mongo-db:
-    labels:
-      org.fiware: "tutorial"
     image: mongo:${MONGO_DB_VERSION}
     hostname: mongo-db
     container_name: db-mongo
     expose:
       - "${MONGO_DB_PORT}"
     ports:
-      - "${MONGO_DB_PORT}:${MONGO_DB_PORT}" # localhost:27017
+      - "${MONGO_DB_PORT}:${MONGO_DB_PORT}"
     networks:
       - default
     volumes:
@@ -121,8 +97,6 @@ services:
       interval: 5s
 
   crate-db:
-    labels:
-      org.fiware: "tutorial"
     image: crate:${CRATE_VERSION}
     hostname: crate-db
     container_name: db-crate
@@ -131,16 +105,14 @@ services:
       - "4200:4200"
       # Transport protocol
       - "4300:4300"
-    command: crate Clicense.enterprise=false -Cauth.host_based.enabled=false  -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*" -Cdiscovery.type=single-node
+    command: crate Clicense.enterprise=false-Cauth.host_based.enabled=false  -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*" -Cdiscovery.type=single-node
     environment:
-      - CRATE_HEAP_SIZE=2g # see https://crate.io/docs/crate/howtos/en/latest/deployment/containers/docker.html#troubleshooting
+      - CRATE_HEAP_SIZE=2g
     volumes:
       - crate-db:/data
 
   # Other services
   grafana:
-    labels:
-      org.fiware: "tutorial"
     image: grafana/grafana:latest
     container_name: grafana
     depends_on:
@@ -173,22 +145,20 @@ services:
     networks:
       - default
 
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - grafana
-      - crate-db
-      - mosquitto
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: nginx
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf
+  #   depends_on:
+  #     - grafana
+  #     - crate-db
+  #     - mosquitto
 
 networks:
   default:
-    labels:
-      org.fiware: "tutorial"
     ipam:
       config:
         - subnet: 172.18.1.0/24
@@ -196,5 +166,4 @@ networks:
 volumes:
   mongo-db:
   crate-db:
-  redis-db:
   grafana:
