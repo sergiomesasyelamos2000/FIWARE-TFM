@@ -1,0 +1,1528 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": 3,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "fdm68idl4td6oa"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 3,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 17,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "timezone": [
+          "Europe/Madrid"
+        ],
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "fdm68idl4td6oa"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  date_trunc('$timeRange', timestamp_sensor) as time,\n  COUNT(*) AS \"metric\"\nFROM\n  etlocationuser\n\nWHERE user_id IN ($user_id ) AND $__timeFilter(timestamp_sensor)\nGROUP BY\n  time\nORDER BY\n  time;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Serie temporal de lineas",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "fdm68idl4td6oa"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 16,
+      "options": {
+        "calculate": true,
+        "calculation": {
+          "xBuckets": {
+            "mode": "size",
+            "value": ""
+          },
+          "yBuckets": {
+            "scale": {
+              "log": 2,
+              "type": "log"
+            }
+          }
+        },
+        "cellGap": 1,
+        "color": {
+          "exponent": 0.5,
+          "fill": "dark-orange",
+          "mode": "scheme",
+          "reverse": false,
+          "scale": "exponential",
+          "scheme": "Spectral",
+          "steps": 64
+        },
+        "exemplars": {
+          "color": "rgba(255,0,255,0.7)"
+        },
+        "filterValues": {
+          "le": 1e-9
+        },
+        "legend": {
+          "show": true
+        },
+        "rowsFrame": {
+          "layout": "auto"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "showColorScale": false,
+          "yHistogram": false
+        },
+        "yAxis": {
+          "axisLabel": "y",
+          "axisPlacement": "left",
+          "reverse": false,
+          "unit": "none"
+        }
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "cdevgudbahypse"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT \n    x1, \n    x2, \n    y1, \n    y2, \n    SUM(EXTRACT(EPOCH FROM timestamp_sensor)) as \"time\"\nFROM \n    etlocationuser\n    WHERE\n    user_id IN ($user_id )\nGROUP BY \n    x1, \n    x2, \n    y1, \n    y2",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Heatmap matriz",
+      "type": "heatmap"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "fdm68idl4td6oa"
+      },
+      "description": "Se usan colores o tamaños de puntos para representar el nivel de incertidumbre en las mediciones donde los puntos con una incertidumbre baja son más grandes y de un color más intenso que los puntos con una incertidumbre alta.",
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 15,
+      "options": {
+        "baidu": {
+          "callback": "bmapReady",
+          "key": ""
+        },
+        "editor": {
+          "format": "auto",
+          "height": 600
+        },
+        "editorMode": "code",
+        "gaode": {
+          "key": "",
+          "plugin": "AMap.Scale,AMap.ToolBar"
+        },
+        "getOption": "const userColors = {\n  'A': '#ff5733', // rojo\n  'B': '#bb33ff', // verde\n  'C': '#3395ff'\n  // Agrega más colores y usuarios según sea necesario\n};\n\nconst series = context.panel.data.series.map((s) => {\n  if (s.refId === 'A') {\n    console.log(\"series\", s);\n    let x = s.fields.find((f) => f.name === 'x').values.buffer ||\n      s.fields.find((f) => f.name === 'x').values;\n\n    let y = s.fields.find((f) => f.name === 'y').values.buffer ||\n      s.fields.find((f) => f.name === 'y').values;\n\n    let uncertain = s.fields.find((f) => f.name === 'uncertain').values.buffer ||\n      s.fields.find((f) => f.name === 'uncertain').values;\n\n    let userId = s.fields.find((f) => f.name === 'user_id').values.buffer ||\n      s.fields.find((f) => f.name === 'user_id').values;\n\n    // Mapear los valores de x y y a un array de pares [x, y]\n    let data = x.map((value, index) => [value, y[index], uncertain[index], userId[index]]);\n\n    return {\n      symbolSize: params => {\n        // Verificar si params.data está definido antes de intentar acceder a sus elementos\n        if (params) {\n          // Aquí puedes definir la lógica para determinar el tamaño del punto basado en el valor de uncertain\n          // Por ejemplo, si uncertain es mayor que un cierto umbral, el tamaño del punto podría ser mayor\n          return params[2] * 20; // Ajusta este valor según tus necesidades\n        } else {\n          return 20; // Valor por defecto si params.data no está definido\n        }\n      },\n      itemStyle: {\n        color: params => {\n          // Verificar si params.data está definido antes de intentar acceder a sus elementos\n          if (params && params.data && params.data[3]) {\n            // Usar el user_id para obtener el color del objeto userColors\n            return userColors[params.data[3]];\n          } else {\n            return '#000000'; // Color por defecto si no se encuentra un color para el user_id\n          }\n        }\n      },\n      data: data,\n      type: 'scatter'\n    };\n  }\n});\n\nreturn {\n  grid: {\n    bottom: \"5%\",\n    containLabel: true,\n    left: \"3%\",\n    right: \"4%\",\n    top: \"4%\"\n  },\n  xAxis: {\n    name: 'Nombre del eje X',\n    nameLocation: 'middle',\n    nameGap: 30,\n    splitLine: { show: false },\n  },\n\n  yAxis: {\n    name: 'Nombre del eje Y',\n    nameLocation: 'end',\n  },\n  legend: {\n    data: ['Nombre de la leyenda'] // Datos de la leyenda\n  },\n  series: series\n};",
+        "google": {
+          "callback": "gmapReady",
+          "key": ""
+        },
+        "map": "json",
+        "renderer": "canvas",
+        "themeEditor": {
+          "config": "{}",
+          "height": 400,
+          "name": "default"
+        },
+        "visualEditor": {
+          "code": "return {\n  grid: {\n    bottom: \"3%\",\n    containLabel: true,\n    left: \"3%\",\n    right: \"4%\",\n    top: \"4%\"\n  },\n  xAxis: {},\n  yAxis: {},\n  series: [\n    {\n      symbolSize: 20,\n      data: [\n        [10.0, 8.04],\n        [8.07, 6.95],\n        [13.0, 7.58],\n        [9.05, 8.81],\n        [11.0, 8.33],\n        [14.0, 7.66],\n        [13.4, 6.81],\n        [10.0, 6.33],\n        [14.0, 8.96],\n        [12.5, 6.82],\n        [9.15, 7.2],\n        [11.5, 7.2],\n        [3.03, 4.23],\n        [12.2, 7.83],\n        [2.02, 4.47],\n        [1.05, 3.33],\n        [4.05, 4.96],\n        [6.03, 7.24],\n        [12.0, 6.26],\n        [12.0, 8.84],\n        [7.08, 5.82],\n        [5.02, 5.68]\n      ],\n      type: 'scatter'\n    }\n  ]\n};",
+          "codeHeight": 600,
+          "dataset": [],
+          "series": []
+        }
+      },
+      "pluginVersion": "6.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "cdevgudbahypse"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  date_trunc('$timeRange', timestamp_sensor) as \"time\",\n  x1 as \"x\",\n  y1 as \"y\",\n  uncertain,\n  user_id as \"user_id\"\nFROM\n  etlocationuser\nWHERE\n  user_id IN ($user_id) AND $__timeFilter(timestamp_sensor)\nGROUP BY\n  time,\n  x1,\n  y1,\n  uncertain,\n  user_id\nORDER BY\n  time ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Visualización de Incertidumbre",
+      "type": "volkovlabs-echarts-panel"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "fdm68idl4td6oa"
+      },
+      "flowchartsData": {
+        "flowcharts": [
+          {
+            "allowDrawio": false,
+            "center": true,
+            "csv": "## See more information for the syntax at https://drawio-app.com/import-from-csv-to-drawio/\n##\n## Example CSV. Use ## for comments and # for configuration.\n## The following names are reserved and should not be used (or ignored):\n## id, tooltip, placeholder(s), link and label (see below)\n##\n#\n## Node label with placeholders and HTML.\n## Default is '%name_of_first_column%'.\n#\n# label: %name%<br><i style=\"color:gray;\">%position%</i><br><a href=\"mailto:%email%\">Email</a>\n#\n## Node style (placeholders are replaced once).\n## Default is the current style for nodes.\n#\n# style: label;image=%image%;whiteSpace=wrap;html=1;rounded=1;fillColor=%fill%;strokeColor=%stroke%;\n#\n## Parent style for nodes with child nodes (placeholders are replaced once).\n#\n# parentstyle: swimlane;whiteSpace=wrap;html=1;childLayout=stackLayout;horizontal=1;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;\n#\n## Optional column name that contains a reference to a named style in styles.\n## Default is the current style for nodes.\n#\n# stylename: -\n#\n## JSON for named styles of the form {\"name\": \"style\", \"name\": \"style\"} where style is a cell style with\n## placeholders that are replaced once.\n#\n# styles: -\n#\n## Optional column name that contains a reference to a named label in labels.\n## Default is the current label.\n#\n# labelname: -\n#\n## JSON for named labels of the form {\"name\": \"label\", \"name\": \"label\"} where label is a cell label with\n## placeholders.\n#\n# labels: -\n#\n## Uses the given column name as the identity for cells (updates existing cells).\n## Default is no identity (empty value or -).\n#\n# identity: -\n#\n## Uses the given column name as the parent reference for cells. Default is no parent (empty or -).\n## The identity above is used for resolving the reference so it must be specified.\n#\n# parent: -\n#\n## Adds a prefix to the identity of cells to make sure they do not collide with existing cells (whose\n## IDs are numbers from 0..n, sometimes with a GUID prefix in the context of realtime collaboration).\n## Default is csvimport-.\n#\n# namespace: csvimport-\n#\n## Connections between rows (\"from\": source colum, \"to\": target column).\n## Label, style and invert are optional. Defaults are '', current style and false.\n## If placeholders are used in the style, they are replaced with data from the source.\n## An optional placeholders can be set to target to use data from the target instead.\n## In addition to label, an optional fromlabel and tolabel can be used to name the column\n## that contains the text for the label in the edges source or target (invert ignored).\n## The label is concatenated in the form fromlabel + label + tolabel if all are defined.\n## The target column may contain a comma-separated list of values.\n## Multiple connect entries are allowed.\n#\n# connect: {\"from\": \"manager\", \"to\": \"name\", \"invert\": true, \"label\": \"manages\", \\\n#          \"style\": \"curved=1;endArrow=blockThin;endFill=1;fontSize=11;\"}\n# connect: {\"from\": \"refs\", \"to\": \"id\", \"style\": \"curved=1;fontSize=11;\"}\n#\n## Node x-coordinate. Possible value is a column name. Default is empty. Layouts will\n## override this value.\n#\n# left: \n#\n## Node y-coordinate. Possible value is a column name. Default is empty. Layouts will\n## override this value.\n#\n# top: \n#\n## Node width. Possible value is a number (in px), auto or an @ sign followed by a column\n## name that contains the value for the width. Default is auto.\n#\n# width: auto\n#\n## Node height. Possible value is a number (in px), auto or an @ sign followed by a column\n## name that contains the value for the height. Default is auto.\n#\n# height: auto\n#\n## Padding for autosize. Default is 0.\n#\n# padding: -12\n#\n## Comma-separated list of ignored columns for metadata. (These can be\n## used for connections and styles but will not be added as metadata.)\n#\n# ignore: id,image,fill,stroke,refs,manager\n#\n## Column to be renamed to link attribute (used as link).\n#\n# link: url\n#\n## Spacing between nodes. Default is 40.\n#\n# nodespacing: 40\n#\n## Spacing between levels of hierarchical layouts. Default is 100.\n#\n# levelspacing: 100\n#\n## Spacing between parallel edges. Default is 40. Use 0 to disable.\n#\n# edgespacing: 40\n#\n## Name or JSON of layout. Possible values are auto, none, verticaltree, horizontaltree,\n## verticalflow, horizontalflow, organic, circle or a JSON string as used in Layout, Apply.\n## Default is auto.\n#\n# layout: auto\n#\n## ---- CSV below this line. First line are column names. ----\nname,position,id,location,manager,email,fill,stroke,refs,url,image\nEvan Miller,CFO,emi,Office 1,,me@example.com,#dae8fc,#6c8ebf,,https://www.draw.io,https://cdn3.iconfinder.com/data/icons/user-avatars-1/512/users-9-2-128.png\nEdward Morrison,Brand Manager,emo,Office 2,Evan Miller,me@example.com,#d5e8d4,#82b366,,https://www.draw.io,https://cdn3.iconfinder.com/data/icons/user-avatars-1/512/users-10-3-128.png\nRon Donovan,System Admin,rdo,Office 3,Evan Miller,me@example.com,#d5e8d4,#82b366,\"emo,tva\",https://www.draw.io,https://cdn3.iconfinder.com/data/icons/user-avatars-1/512/users-2-128.png\nTessa Valet,HR Director,tva,Office 4,Evan Miller,me@example.com,#d5e8d4,#82b366,,https://www.draw.io,https://cdn3.iconfinder.com/data/icons/user-avatars-1/512/users-3-128.png\n",
+            "download": false,
+            "editorTheme": "dark",
+            "editorUrl": "https://www.draw.io",
+            "enableAnim": true,
+            "grid": false,
+            "lock": true,
+            "name": "Main",
+            "scale": true,
+            "tooltip": true,
+            "type": "xml",
+            "url": "http://<YourUrl>/<Your XML/drawio file/api>",
+            "xml": "<mxfile host=\"app.diagrams.net\" modified=\"2024-05-19T11:30:25.089Z\" agent=\"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0\" etag=\"OWJtjGZIa1V0Dk7y_SOk\" version=\"24.0.7\" type=\"embed\">\n  <diagram id=\"yTSrfheXbhThAiSCHX68\" name=\"Page-1\">\n    <mxGraphModel dx=\"1949\" dy=\"1194\" grid=\"1\" gridSize=\"10\" guides=\"1\" tooltips=\"1\" connect=\"1\" arrows=\"1\" fold=\"1\" page=\"1\" pageScale=\"1\" pageWidth=\"4681\" pageHeight=\"3300\" background=\"#ffffff\" math=\"0\" shadow=\"0\">\n      <root>\n        <mxCell id=\"0\" />\n        <mxCell id=\"1\" parent=\"0\" />\n        <mxCell id=\"z4AA9EEG8jXJs2W3tZlR-164\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1407\" y=\"323\" width=\"120\" height=\"1007\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"z4AA9EEG8jXJs2W3tZlR-163\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1075\" y=\"1078\" width=\"455\" height=\"257\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"z4AA9EEG8jXJs2W3tZlR-161\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"190.5\" y=\"183\" width=\"1279.5\" height=\"977\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"2\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"625\" y=\"598\" width=\"139\" height=\"35\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"3\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1144\" y=\"367\" width=\"30\" height=\"76\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"4\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.window;fillColor=#ffffff;rotation=-90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"136\" y=\"538\" width=\"108\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"5\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1224\" y=\"198\" width=\"150\" height=\"55\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"6\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1207\" y=\"287\" width=\"187\" height=\"146\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"7\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"596\" y=\"778\" width=\"58\" height=\"215\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"8\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"564\" y=\"205\" width=\"450\" height=\"60\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"9\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1534\" y=\"603\" width=\"30\" height=\"100\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"10\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"188\" y=\"35\" width=\"356\" height=\"280\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"11\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"578\" y=\"1148\" width=\"126\" height=\"65\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"12\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.doorLeft;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1472\" y=\"329\" width=\"46\" height=\"49\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"13\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1074\" y=\"1188\" width=\"130\" height=\"55\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"14\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1095\" y=\"1050\" width=\"69\" height=\"73\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"15\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1078\" y=\"726\" width=\"336\" height=\"97\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"16\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"394\" y=\"1021\" width=\"49\" height=\"48\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"17\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"395\" y=\"775\" width=\"49\" height=\"48\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"18\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"481\" y=\"433\" width=\"51\" height=\"43\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"19\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.plant;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"692\" y=\"534\" width=\"47\" height=\"51\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"20\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.dresser;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1420\" y=\"1104\" width=\"149\" height=\"58\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"21\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.dresser;rotation=-180;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1105\" y=\"667\" width=\"70\" height=\"46\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"22\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.dresser;rotation=-90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"193\" y=\"516\" width=\"100\" height=\"60\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"23\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.window;fillColor=#ffffff;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"664\" y=\"183\" width=\"100\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"24\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.couch;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"428\" y=\"524\" width=\"150\" height=\"80\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"25\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.flat_tv;rotation=-90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"203\" y=\"540\" width=\"70\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"26\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.window;fillColor=#ffffff;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"250\" y=\"311\" width=\"104\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"27\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.window;fillColor=#ffffff;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1247\" y=\"187\" width=\"100\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"28\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.toilet;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1070\" y=\"209\" width=\"50\" height=\"67\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"29\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.sink_double;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"674\" y=\"220\" width=\"80\" height=\"35\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"30\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.sink_1;rotation=-90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1013\" y=\"322\" width=\"61\" height=\"45\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"31\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.dresser;rotation=-90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1003\" y=\"243\" width=\"60\" height=\"29\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"32\" value=\"\" style=\"group;rotation=90;container=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\" connectable=\"0\">\n          <mxGeometry x=\"803\" y=\"754\" width=\"200\" height=\"140\" as=\"geometry\">\n            <mxRectangle x=\"962\" y=\"727\" width=\"14\" height=\"8\" as=\"alternateBounds\" />\n          </mxGeometry>\n        </mxCell>\n        <mxCell id=\"33\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.office_chair;fillColor=#ffffff;strokeColor=#23445D;shadow=0;rotation=90;\" parent=\"32\" vertex=\"1\">\n          <mxGeometry x=\"129\" y=\"19\" width=\"40\" height=\"43\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"34\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.office_chair;fillColor=#ffffff;strokeColor=#23445D;shadow=0;direction=west;rotation=90;\" parent=\"32\" vertex=\"1\">\n          <mxGeometry x=\"32\" y=\"19\" width=\"40\" height=\"43\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"35\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.office_chair;fillColor=#ffffff;strokeColor=#23445D;shadow=0;direction=north;rotation=90;\" parent=\"32\" vertex=\"1\">\n          <mxGeometry x=\"79\" y=\"-28\" width=\"43\" height=\"40\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"36\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.office_chair;fillColor=#ffffff;strokeColor=#23445D;shadow=0;direction=south;rotation=90;\" parent=\"32\" vertex=\"1\">\n          <mxGeometry x=\"79\" y=\"129\" width=\"43\" height=\"40\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"37\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.office_chair;fillColor=#ffffff;strokeColor=#23445D;shadow=0;rotation=90;\" parent=\"32\" vertex=\"1\">\n          <mxGeometry x=\"129\" y=\"79\" width=\"40\" height=\"43\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"38\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.office_chair;fillColor=#ffffff;strokeColor=#23445D;shadow=0;direction=west;rotation=90;\" parent=\"32\" vertex=\"1\">\n          <mxGeometry x=\"32\" y=\"79\" width=\"40\" height=\"43\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"39\" value=\"\" style=\"shape=rect;fillColor=#ffffff;strokeColor=#23445D;shadow=0;rotation=90;\" parent=\"32\" vertex=\"1\">\n          <mxGeometry x=\"20\" y=\"20\" width=\"160\" height=\"100\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"40\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.couch;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"344\" y=\"881\" width=\"181\" height=\"80\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"41\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.sofa;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"266\" y=\"735\" width=\"90\" height=\"80\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"42\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.fireplace;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"177\" y=\"877\" width=\"128\" height=\"72\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"43\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.piano;rotation=-105;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"212\" y=\"1003\" width=\"113\" height=\"120\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"44\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.stairs;direction=south;rotation=-180;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"684\" y=\"714\" width=\"80\" height=\"300\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"45\" value=\"\" style=\"group;rotation=45;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\" connectable=\"0\">\n          <mxGeometry x=\"715\" y=\"332\" width=\"295\" height=\"253\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"46\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.chair;fillColor=#ffffff;strokeColor=#23445D;shadow=0;rotation=45;\" parent=\"45\" vertex=\"1\">\n          <mxGeometry x=\"81\" y=\"13\" width=\"40\" height=\"52\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"47\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.chair;fillColor=#ffffff;strokeColor=#23445D;shadow=0;direction=west;rotation=45;\" parent=\"45\" vertex=\"1\">\n          <mxGeometry x=\"19\" y=\"75\" width=\"40\" height=\"52\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"48\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.chair;fillColor=#ffffff;strokeColor=#23445D;shadow=0;direction=north;rotation=45;\" parent=\"45\" vertex=\"1\">\n          <mxGeometry x=\"13\" y=\"19\" width=\"52\" height=\"40\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"49\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.chair;fillColor=#ffffff;strokeColor=#23445D;shadow=0;direction=south;rotation=45;\" parent=\"45\" vertex=\"1\">\n          <mxGeometry x=\"75\" y=\"81\" width=\"52\" height=\"40\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"50\" value=\"\" style=\"shape=ellipse;fillColor=#ffffff;strokeColor=#23445D;shadow=0;rotation=45;\" parent=\"45\" vertex=\"1\">\n          <mxGeometry x=\"20\" y=\"20\" width=\"100\" height=\"100\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"164\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;opacity=50;fontSize=25;fontStyle=1\" parent=\"45\" vertex=\"1\">\n          <mxGeometry x=\"247\" y=\"144\" width=\"44\" height=\"109\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"51\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.range_2;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"807\" y=\"205\" width=\"75\" height=\"68\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"52\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.refrigerator;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"936\" y=\"375\" width=\"70\" height=\"72\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"53\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.sofa;rotation=-45;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1163\" y=\"284\" width=\"81\" height=\"77\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"54\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=15;shape=mxgraph.floorplan.wallCorner;fillColor=#000000;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1354\" y=\"426\" width=\"282\" height=\"71\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"55\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.doorRight;rotation=180;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"602\" y=\"1063\" width=\"80\" height=\"85\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"56\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.floor_lamp;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"491\" y=\"442\" width=\"30\" height=\"30\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"57\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.floor_lamp;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"491\" y=\"643\" width=\"40\" height=\"40\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"58\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.floor_lamp;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"221\" y=\"447\" width=\"36\" height=\"36\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"59\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.chair;rotation=40;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1009\" y=\"611\" width=\"41\" height=\"52\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"60\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.chair;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1014\" y=\"1011\" width=\"41\" height=\"52\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"61\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.chair;rotation=180;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"950\" y=\"1080\" width=\"41\" height=\"52\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"62\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.floor_lamp;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"402\" y=\"780\" width=\"36\" height=\"36\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"63\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.floor_lamp;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"400\" y=\"1027\" width=\"36\" height=\"36\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"64\" value=\"\" style=\"group;rotation=-90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\" connectable=\"0\">\n          <mxGeometry x=\"483\" y=\"738\" width=\"80\" height=\"70\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"65\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.office_chair;fillColor=#ffffff;strokeColor=#23445D;shadow=0;rotation=-90;\" parent=\"64\" vertex=\"1\">\n          <mxGeometry x=\"7\" y=\"14\" width=\"40\" height=\"43\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"66\" value=\"\" style=\"shape=rect;fillColor=#ffffff;strokeColor=#23445D;shadow=0;rotation=-90;\" parent=\"64\" vertex=\"1\">\n          <mxGeometry x=\"10\" y=\"10\" width=\"80\" height=\"50\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"67\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.workstation;fillColor=#ffffff;strokeColor=#23445D;shadow=0;flipV=1;rotation=-90;\" parent=\"64\" vertex=\"1\">\n          <mxGeometry x=\"30\" y=\"15\" width=\"50\" height=\"40\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"68\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.bookcase;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"608\" y=\"847\" width=\"120\" height=\"30\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"69\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.stairs;direction=south;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1413\" y=\"724\" width=\"100\" height=\"209\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"70\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.doorRight;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1294\" y=\"714\" width=\"80\" height=\"85\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"71\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.doorRight;rotation=180;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1197\" y=\"484\" width=\"80\" height=\"85\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"72\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.crt_tv;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1444\" y=\"439\" width=\"80\" height=\"40\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"73\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.bookcase;rotation=135;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"493\" y=\"1087\" width=\"51\" height=\"30\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"74\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.dresser;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"255\" y=\"336\" width=\"99\" height=\"47\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"75\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.dresser;rotation=-180;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"737\" y=\"538\" width=\"99\" height=\"47\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"76\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.dresser;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"970\" y=\"802\" width=\"149\" height=\"47\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"77\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.dresser;rotation=-180;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1294\" y=\"544\" width=\"119\" height=\"47\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"78\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.plant;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"210\" y=\"592\" width=\"47\" height=\"51\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"79\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.plant;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1459\" y=\"529\" width=\"47\" height=\"51\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"80\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.plant;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"780\" y=\"612\" width=\"47\" height=\"51\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"81\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=15;shape=mxgraph.floorplan.wallCorner;fillColor=#000000;rotation=180;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1484\" y=\"1215\" width=\"50\" height=\"120\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"82\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.window;fillColor=#ffffff;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1123\" y=\"1323\" width=\"354\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"83\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.sink_2;rotation=-90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1075\" y=\"1072\" width=\"46\" height=\"33\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"84\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.dresser;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1272\" y=\"1107\" width=\"214\" height=\"60\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"85\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.window;fillColor=#ffffff;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1452\" y=\"1125\" width=\"155\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"86\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.doorRight;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1454\" y=\"611\" width=\"79\" height=\"81\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"87\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=3;shape=mxgraph.floorplan.wall;fillColor=#23445D;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"202\" y=\"699\" width=\"112\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"88\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=3;shape=mxgraph.floorplan.wall;fillColor=#23445D;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"449\" y=\"699\" width=\"145\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"89\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=3;shape=mxgraph.floorplan.wall;fillColor=#23445D;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"702\" y=\"587\" width=\"172\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"90\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=3;shape=mxgraph.floorplan.wall;fillColor=#23445D;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"564\" y=\"587\" width=\"150\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"91\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=6;shape=mxgraph.floorplan.wall;fillColor=#23445D;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1115\" y=\"463\" width=\"90\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"92\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=3;shape=mxgraph.floorplan.wall;fillColor=#23445D;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1503\" y=\"714\" width=\"31\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"93\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=15;shape=mxgraph.floorplan.wall;fillColor=#000000;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1353\" y=\"871\" width=\"351\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"94\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=4;shape=mxgraph.floorplan.wall;fillColor=#23445D;direction=south;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1004\" y=\"203\" width=\"20\" height=\"290\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"95\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=4;shape=mxgraph.floorplan.wall;fillColor=#23445D;direction=south;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1128\" y=\"203\" width=\"20\" height=\"260\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"96\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=4;shape=mxgraph.floorplan.wall;fillColor=#23445D;direction=south;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"554\" y=\"443\" width=\"20\" height=\"410\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"97\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=4;shape=mxgraph.floorplan.wall;fillColor=#23445D;direction=south;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1403\" y=\"723\" width=\"20\" height=\"210\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"98\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=3;shape=mxgraph.floorplan.wall;fillColor=#23445D;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"654\" y=\"699\" width=\"111\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"99\" value=\"\" style=\"ellipse;whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1005\" y=\"1072\" width=\"50\" height=\"50\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"100\" value=\"\" style=\"ellipse;whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"578\" y=\"533\" width=\"41\" height=\"41\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"101\" value=\"\" style=\"ellipse;whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"230\" y=\"222\" width=\"41\" height=\"41\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"102\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"215\" y=\"338\" width=\"33\" height=\"26\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"103\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"362\" y=\"339\" width=\"33\" height=\"26\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"104\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"668\" y=\"748\" width=\"16\" height=\"37\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"105\" value=\"\" style=\"ellipse;whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1297\" y=\"1091\" width=\"28\" height=\"28\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"106\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=3;shape=mxgraph.floorplan.wall;fillColor=#23445D;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1407\" y=\"929\" width=\"111\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"107\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=4;shape=mxgraph.floorplan.wall;fillColor=#23445D;direction=south;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1003\" y=\"573\" width=\"20\" height=\"17\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"108\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=4;shape=mxgraph.floorplan.wall;fillColor=#23445D;direction=south;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"755\" y=\"1102\" width=\"20\" height=\"45\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"109\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=4;shape=mxgraph.floorplan.wall;fillColor=#23445D;direction=south;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"755\" y=\"593\" width=\"20\" height=\"434\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"110\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=4;shape=mxgraph.floorplan.wall;fillColor=#23445D;direction=south;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"554\" y=\"993\" width=\"20\" height=\"159\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"111\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.dresser;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1145\" y=\"205\" width=\"88\" height=\"58\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"112\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.dresser;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1364\" y=\"205\" width=\"88\" height=\"58\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"113\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.plant;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"645\" y=\"930\" width=\"39\" height=\"42\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"114\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"948\" y=\"205\" width=\"60\" height=\"158\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"115\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"569\" y=\"205\" width=\"60\" height=\"158\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"116\" value=\"\" style=\"rounded=1;whiteSpace=wrap;html=1;rotation=90;arcSize=50;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"280\" y=\"509\" width=\"195\" height=\"117\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"117\" value=\"\" style=\"whiteSpace=wrap;html=1;rotation=45;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1375\" y=\"291\" width=\"46\" height=\"45\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"118\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.doorLeft;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"432\" y=\"313\" width=\"80\" height=\"85\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"119\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.doorRight;rotation=90;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1041\" y=\"398\" width=\"69\" height=\"73\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"120\" value=\"\" style=\"ellipse;whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1025\" y=\"388\" width=\"20\" height=\"20\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"121\" value=\"\" style=\"endArrow=none;html=1;endFill=0;entryX=-0.033;entryY=-0.1;entryPerimeter=0;strokeColor=#23445D;\" parent=\"1\" edge=\"1\">\n          <mxGeometry width=\"50\" height=\"50\" relative=\"1\" as=\"geometry\">\n            <mxPoint x=\"586\" y=\"705\" as=\"sourcePoint\" />\n            <mxPoint x=\"732\" y=\"705\" as=\"targetPoint\" />\n          </mxGeometry>\n        </mxCell>\n        <mxCell id=\"122\" value=\"\" style=\"endArrow=none;html=1;endFill=0;entryX=-0.033;entryY=-0.1;entryPerimeter=0;strokeColor=#23445D;\" parent=\"1\" edge=\"1\">\n          <mxGeometry width=\"50\" height=\"50\" relative=\"1\" as=\"geometry\">\n            <mxPoint x=\"1390\" y=\"719\" as=\"sourcePoint\" />\n            <mxPoint x=\"1536\" y=\"719\" as=\"targetPoint\" />\n          </mxGeometry>\n        </mxCell>\n        <mxCell id=\"123\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1370\" y=\"713\" width=\"50\" height=\"13\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"124\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1075\" y=\"713\" width=\"220\" height=\"13\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"125\" value=\"\" style=\"whiteSpace=wrap;html=1;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"704\" y=\"1106\" width=\"40\" height=\"37\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"126\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1056\" y=\"1141\" width=\"25\" height=\"202\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"127\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1056\" y=\"1319\" width=\"71\" height=\"24\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"128\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"957\" y=\"586\" width=\"124\" height=\"13\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"129\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1067\" y=\"587\" width=\"14\" height=\"570\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"130\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1194\" y=\"589\" width=\"332\" height=\"13\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"131\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1194\" y=\"569\" width=\"13\" height=\"30\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"132\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;flipH=1;flipV=1;direction=south;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1452\" y=\"181\" width=\"25\" height=\"157\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"133\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;direction=south;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"544\" y=\"178\" width=\"118\" height=\"27\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"134\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"555\" y=\"326\" width=\"14\" height=\"43\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"135\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;direction=south;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"514\" y=\"305\" width=\"55\" height=\"25\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"136\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"543\" y=\"178\" width=\"26\" height=\"138\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"137\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;direction=south;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"765\" y=\"178\" width=\"477\" height=\"27\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"138\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;direction=south;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1351\" y=\"178\" width=\"126\" height=\"27\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"139\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;direction=south;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"351\" y=\"305\" width=\"78\" height=\"25\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"140\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;direction=south;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"179\" y=\"305\" width=\"250\" height=\"25\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"141\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"179\" y=\"324\" width=\"24\" height=\"167\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"142\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"179\" y=\"595\" width=\"24\" height=\"571\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"143\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.window;fillColor=#ffffff;rotation=45;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"764\" y=\"1173\" width=\"61\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"144\" value=\"\" style=\"endArrow=none;html=1;endFill=0;entryX=-0.033;entryY=-0.1;entryPerimeter=0;strokeColor=#23445D;\" parent=\"1\" edge=\"1\">\n          <mxGeometry width=\"50\" height=\"50\" relative=\"1\" as=\"geometry\">\n            <mxPoint x=\"789\" y=\"1143\" as=\"sourcePoint\" />\n            <mxPoint x=\"935\" y=\"1143\" as=\"targetPoint\" />\n          </mxGeometry>\n        </mxCell>\n        <mxCell id=\"145\" value=\"\" style=\"endArrow=none;html=1;endFill=0;strokeColor=#23445D;\" parent=\"1\" edge=\"1\">\n          <mxGeometry width=\"50\" height=\"50\" relative=\"1\" as=\"geometry\">\n            <mxPoint x=\"837.5\" y=\"1143\" as=\"sourcePoint\" />\n            <mxPoint x=\"837.5\" y=\"1194\" as=\"targetPoint\" />\n          </mxGeometry>\n        </mxCell>\n        <mxCell id=\"146\" value=\"\" style=\"endArrow=none;html=1;endFill=0;strokeColor=#23445D;\" parent=\"1\" edge=\"1\">\n          <mxGeometry width=\"50\" height=\"50\" relative=\"1\" as=\"geometry\">\n            <mxPoint x=\"886.5\" y=\"1143\" as=\"sourcePoint\" />\n            <mxPoint x=\"886.5\" y=\"1194\" as=\"targetPoint\" />\n          </mxGeometry>\n        </mxCell>\n        <mxCell id=\"147\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.window;fillColor=#ffffff;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"812\" y=\"1194\" width=\"100\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"148\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.window;fillColor=#ffffff;rotation=-45;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"899\" y=\"1169\" width=\"63\" height=\"16\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"149\" value=\"\" style=\"endArrow=none;html=1;endFill=0;entryX=-0.033;entryY=-0.1;entryPerimeter=0;strokeColor=#23445D;\" parent=\"1\" edge=\"1\">\n          <mxGeometry width=\"50\" height=\"50\" relative=\"1\" as=\"geometry\">\n            <mxPoint x=\"351\" y=\"1143\" as=\"sourcePoint\" />\n            <mxPoint x=\"497\" y=\"1143\" as=\"targetPoint\" />\n          </mxGeometry>\n        </mxCell>\n        <mxCell id=\"150\" value=\"\" style=\"endArrow=none;html=1;endFill=0;strokeColor=#23445D;\" parent=\"1\" edge=\"1\">\n          <mxGeometry width=\"50\" height=\"50\" relative=\"1\" as=\"geometry\">\n            <mxPoint x=\"399.5000000000002\" y=\"1143\" as=\"sourcePoint\" />\n            <mxPoint x=\"399.5000000000002\" y=\"1194\" as=\"targetPoint\" />\n          </mxGeometry>\n        </mxCell>\n        <mxCell id=\"151\" value=\"\" style=\"endArrow=none;html=1;endFill=0;strokeColor=#23445D;\" parent=\"1\" edge=\"1\">\n          <mxGeometry width=\"50\" height=\"50\" relative=\"1\" as=\"geometry\">\n            <mxPoint x=\"448.5000000000002\" y=\"1143\" as=\"sourcePoint\" />\n            <mxPoint x=\"448.5000000000002\" y=\"1194\" as=\"targetPoint\" />\n          </mxGeometry>\n        </mxCell>\n        <mxCell id=\"152\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.window;fillColor=#ffffff;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"374\" y=\"1194\" width=\"100\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"153\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.window;fillColor=#ffffff;rotation=45;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"326\" y=\"1173\" width=\"61\" height=\"10\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"154\" value=\"\" style=\"verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeWidth=1;shape=mxgraph.floorplan.window;fillColor=#ffffff;rotation=-45;strokeColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"461\" y=\"1169\" width=\"63\" height=\"16\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"155\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"179\" y=\"1141\" width=\"174\" height=\"25\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"156\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"497\" y=\"1141\" width=\"105\" height=\"25\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"157\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"682\" y=\"1141\" width=\"107\" height=\"25\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"158\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"937\" y=\"1141\" width=\"144\" height=\"25\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"159\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1194\" y=\"460\" width=\"14\" height=\"23\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"160\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#23445D;direction=north;\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"962\" y=\"460\" width=\"75\" height=\"16\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"z4AA9EEG8jXJs2W3tZlR-167\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;opacity=50;fontSize=25;fontStyle=1\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"203\" y=\"709\" width=\"354\" height=\"431\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"z4AA9EEG8jXJs2W3tZlR-168\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;opacity=50;fontSize=25;fontStyle=1\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"772\" y=\"599\" width=\"295\" height=\"542\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"163\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;opacity=50;fontSize=25;fontStyle=1\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"962\" y=\"205\" width=\"45\" height=\"255\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"165\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;opacity=50;fontSize=25;fontStyle=1\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"570\" y=\"207\" width=\"392\" height=\"378\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"166\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;opacity=50;fontSize=25;fontStyle=1\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"203\" y=\"331\" width=\"354\" height=\"366\" as=\"geometry\" />\n        </mxCell>\n        <mxCell id=\"167\" value=\"\" style=\"rounded=0;whiteSpace=wrap;html=1;strokeColor=none;opacity=50;fontSize=25;fontStyle=1\" parent=\"1\" vertex=\"1\">\n          <mxGeometry x=\"1081\" y=\"726\" width=\"435\" height=\"593\" as=\"geometry\" />\n        </mxCell>\n      </root>\n    </mxGraphModel>\n  </diagram>\n</mxfile>\n",
+            "zoom": "100%"
+          }
+        ]
+      },
+      "format": "short",
+      "graphId": "flowchart_18",
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 18,
+      "newFlag": false,
+      "rulesData": {
+        "rulesData": [
+          {
+            "aggregation": "current",
+            "alias": "P5",
+            "colors": [
+              "#5794F2",
+              "#5794F2",
+              "#73BF69",
+              "#FADE2A",
+              "#F2495C"
+            ],
+            "column": "Time",
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 2,
+            "eventData": [],
+            "eventProp": "id",
+            "eventRegEx": false,
+            "gradient": true,
+            "hidden": false,
+            "invert": true,
+            "linkData": [],
+            "linkProp": "id",
+            "linkRegEx": true,
+            "mappingType": 1,
+            "metricType": "serie",
+            "order": 1,
+            "overlayIcon": false,
+            "pattern": "P5",
+            "rangeData": [],
+            "reduce": true,
+            "refId": "A",
+            "sanitize": false,
+            "shapeData": [
+              {
+                "colorOn": "a",
+                "hidden": false,
+                "pattern": "167",
+                "style": "fillColor"
+              }
+            ],
+            "shapeProp": "id",
+            "shapeRegEx": true,
+            "stringThresholds": [],
+            "textData": [
+              {
+                "hidden": false,
+                "pattern": "167",
+                "textOn": "wmd",
+                "textPattern": "/.*/",
+                "textReplace": "content"
+              }
+            ],
+            "textProp": "id",
+            "textRegEx": true,
+            "thresholds": [
+              0.25,
+              0.5,
+              0.75,
+              1
+            ],
+            "tooltip": true,
+            "tooltipColors": false,
+            "tooltipLabel": "ROOM 5",
+            "tooltipOn": "a",
+            "tpDirection": "v",
+            "tpGraph": true,
+            "tpGraphScale": "linear",
+            "tpGraphSize": "100%",
+            "tpGraphType": "line",
+            "type": "number",
+            "unit": "percent",
+            "valueData": []
+          },
+          {
+            "aggregation": "current",
+            "alias": "P4",
+            "colors": [
+              "#5794F2",
+              "#5794F2",
+              "#73BF69",
+              "#FADE2A",
+              "#F2495C"
+            ],
+            "column": "Time",
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 2,
+            "eventData": [],
+            "eventProp": "id",
+            "eventRegEx": false,
+            "gradient": true,
+            "hidden": false,
+            "invert": true,
+            "linkData": [],
+            "linkProp": "id",
+            "linkRegEx": true,
+            "mappingType": 1,
+            "metricType": "serie",
+            "order": 2,
+            "overlayIcon": false,
+            "pattern": "P4",
+            "rangeData": [],
+            "reduce": true,
+            "refId": "A",
+            "sanitize": false,
+            "shapeData": [
+              {
+                "colorOn": "a",
+                "hidden": false,
+                "pattern": "166",
+                "style": "fillColor"
+              }
+            ],
+            "shapeProp": "id",
+            "shapeRegEx": true,
+            "stringThresholds": [
+              "/.*/",
+              "/.*/"
+            ],
+            "textData": [
+              {
+                "hidden": false,
+                "pattern": "166",
+                "textOn": "wmd",
+                "textPattern": "/.*/",
+                "textReplace": "content"
+              }
+            ],
+            "textProp": "id",
+            "textRegEx": true,
+            "thresholds": [
+              0.25,
+              0.5,
+              0.75,
+              1
+            ],
+            "tooltip": true,
+            "tooltipColors": false,
+            "tooltipLabel": "ROOM 4",
+            "tooltipOn": "a",
+            "tpDirection": "v",
+            "tpGraph": true,
+            "tpGraphScale": "linear",
+            "tpGraphSize": "100%",
+            "tpGraphType": "line",
+            "type": "number",
+            "unit": "percent",
+            "valueData": []
+          },
+          {
+            "aggregation": "current",
+            "alias": "P3",
+            "colors": [
+              "#5794F2",
+              "#5794F2",
+              "#73BF69",
+              "#FADE2A",
+              "#F2495C"
+            ],
+            "column": "Time",
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 2,
+            "eventData": [],
+            "eventProp": "id",
+            "eventRegEx": false,
+            "gradient": true,
+            "hidden": false,
+            "invert": true,
+            "linkData": [],
+            "linkProp": "id",
+            "linkRegEx": true,
+            "mappingType": 1,
+            "metricType": "serie",
+            "order": 3,
+            "overlayIcon": false,
+            "pattern": "P3",
+            "rangeData": [],
+            "reduce": true,
+            "refId": "A",
+            "sanitize": false,
+            "shapeData": [
+              {
+                "colorOn": "a",
+                "hidden": false,
+                "pattern": "z4AA9EEG8jXJs2W3tZlR-168",
+                "style": "fillColor"
+              }
+            ],
+            "shapeProp": "id",
+            "shapeRegEx": true,
+            "stringThresholds": [
+              "/.*/",
+              "/.*/"
+            ],
+            "textData": [
+              {
+                "hidden": false,
+                "pattern": "z4AA9EEG8jXJs2W3tZlR-168",
+                "textOn": "wmd",
+                "textPattern": "/.*/",
+                "textReplace": "content"
+              }
+            ],
+            "textProp": "id",
+            "textRegEx": true,
+            "thresholds": [
+              0.25,
+              0.5,
+              0.75,
+              1
+            ],
+            "tooltip": true,
+            "tooltipColors": true,
+            "tooltipLabel": "ROOM 3",
+            "tooltipOn": "a",
+            "tpDirection": "v",
+            "tpGraph": true,
+            "tpGraphScale": "linear",
+            "tpGraphSize": "100%",
+            "tpGraphType": "line",
+            "type": "number",
+            "unit": "percent",
+            "valueData": []
+          },
+          {
+            "aggregation": "current",
+            "alias": "P2",
+            "colors": [
+              "#5794F2",
+              "#5794F2",
+              "#73BF69",
+              "#FADE2A",
+              "#F2495C"
+            ],
+            "column": "Time",
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 2,
+            "eventData": [],
+            "eventProp": "id",
+            "eventRegEx": false,
+            "gradient": true,
+            "hidden": false,
+            "invert": true,
+            "linkData": [],
+            "linkProp": "id",
+            "linkRegEx": true,
+            "mappingType": 1,
+            "metricType": "serie",
+            "order": 4,
+            "overlayIcon": false,
+            "pattern": "P2",
+            "rangeData": [],
+            "reduce": true,
+            "refId": "A",
+            "sanitize": false,
+            "shapeData": [
+              {
+                "colorOn": "a",
+                "hidden": false,
+                "pattern": "z4AA9EEG8jXJs2W3tZlR-167",
+                "style": "fillColor"
+              }
+            ],
+            "shapeProp": "id",
+            "shapeRegEx": true,
+            "stringThresholds": [
+              "/.*/",
+              "/.*/"
+            ],
+            "textData": [
+              {
+                "hidden": false,
+                "pattern": "z4AA9EEG8jXJs2W3tZlR-167",
+                "textOn": "wmd",
+                "textPattern": "/.*/",
+                "textReplace": "content"
+              }
+            ],
+            "textProp": "id",
+            "textRegEx": true,
+            "thresholds": [
+              0.25,
+              0.5,
+              0.75,
+              1
+            ],
+            "tooltip": true,
+            "tooltipColors": true,
+            "tooltipLabel": "ROOM 2",
+            "tooltipOn": "a",
+            "tpDirection": "v",
+            "tpGraph": true,
+            "tpGraphScale": "linear",
+            "tpGraphSize": "100%",
+            "tpGraphType": "line",
+            "type": "number",
+            "unit": "percent",
+            "valueData": []
+          },
+          {
+            "aggregation": "current",
+            "alias": "P1",
+            "colors": [
+              "#5794F2",
+              "#5794F2",
+              "#73BF69",
+              "#FADE2A",
+              "#F2495C"
+            ],
+            "column": "Time",
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 2,
+            "eventData": [],
+            "eventProp": "id",
+            "eventRegEx": false,
+            "gradient": true,
+            "hidden": false,
+            "invert": true,
+            "linkData": [],
+            "linkProp": "id",
+            "linkRegEx": true,
+            "mappingType": 1,
+            "metricType": "serie",
+            "order": 5,
+            "overlayIcon": false,
+            "pattern": "P1",
+            "rangeData": [],
+            "reduce": true,
+            "refId": "A",
+            "sanitize": false,
+            "shapeData": [
+              {
+                "colorOn": "a",
+                "hidden": false,
+                "pattern": "164",
+                "style": "fillColor"
+              },
+              {
+                "colorOn": "a",
+                "hidden": false,
+                "pattern": "163",
+                "style": "fillColor"
+              },
+              {
+                "colorOn": "a",
+                "hidden": false,
+                "pattern": "165",
+                "style": "fillColor"
+              }
+            ],
+            "shapeProp": "id",
+            "shapeRegEx": true,
+            "stringThresholds": [
+              "/.*/",
+              "/.*/"
+            ],
+            "textData": [
+              {
+                "hidden": false,
+                "pattern": "165",
+                "textOn": "wmd",
+                "textPattern": "/.*/",
+                "textReplace": "content"
+              }
+            ],
+            "textProp": "id",
+            "textRegEx": true,
+            "thresholds": [
+              0.25,
+              0.5,
+              0.75,
+              1
+            ],
+            "tooltip": true,
+            "tooltipColors": true,
+            "tooltipLabel": "ROOM 1",
+            "tooltipOn": "a",
+            "tpDirection": "v",
+            "tpGraph": true,
+            "tpGraphScale": "linear",
+            "tpGraphSize": "100%",
+            "tpGraphType": "line",
+            "type": "number",
+            "unit": "percent",
+            "valueData": []
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "e29304bc-c109-495f-8105-83d9911b53c3"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT \n  date_trunc('$timeRange', timestamp_sensor) AS \"time\", \n  uncertain AS \"P1\" \nFROM \n  etlocationuser\nWHERE \n  $__timeFilter(timestamp_sensor) AND\n  (x1 BETWEEN 0 AND 25) AND \n  (x2 BETWEEN 0 AND 25) AND \n  (y1 BETWEEN 0 AND 25) AND \n  (y2 BETWEEN 0 AND 25)\nGROUP BY\n  time,\n  uncertain\nORDER BY\n  time ASC",
+          "refId": "P1",
+          "sql": {
+            "columns": [],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "e29304bc-c109-495f-8105-83d9911b53c3"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  date_trunc('$timeRange', timestamp_sensor) AS \"time\",\n  uncertain AS \"P2\"\nFROM\n  etlocationuser\nWHERE\n  $__timeFilter(timestamp_sensor)\n  AND (\n    x1 BETWEEN 26\n    AND 50\n  )\n  AND (\n    x2 BETWEEN 26\n    AND 50\n  )\n  AND (\n    y1 BETWEEN 0\n    AND 25\n  )\n  AND (\n    y2 BETWEEN 0\n    AND 25\n  )\nGROUP BY\n  time,\n  uncertain\nORDER BY\n  time ASC",
+          "refId": "P2",
+          "sql": {
+            "columns": [],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "e29304bc-c109-495f-8105-83d9911b53c3"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  date_trunc('$timeRange', timestamp_sensor) AS \"time\",\n  uncertain AS \"P3\"\nFROM\n  etlocationuser\nWHERE\n  $__timeFilter(timestamp_sensor)\n  AND (\n    x1 BETWEEN 26\n    AND 50\n  )\n  AND (\n    x2 BETWEEN 26\n    AND 50\n  )\n  AND (\n    y1 BETWEEN 26\n    AND 50\n  )\n  AND (\n    y2 BETWEEN 26\n    AND 50\n  )\nGROUP BY\n  time,\n  uncertain\nORDER BY\n  time ASC",
+          "refId": "P3",
+          "sql": {
+            "columns": [],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "e29304bc-c109-495f-8105-83d9911b53c3"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  date_trunc('$timeRange', timestamp_sensor) AS \"time\",\n  uncertain AS \"P4\"\nFROM\n  etlocationuser\nWHERE\n  $__timeFilter(timestamp_sensor)\n  AND (\n    x1 BETWEEN 51\n    AND 100\n  )\n  AND (\n    x2 BETWEEN 51\n    AND 100\n  )\n  AND (\n    y1 BETWEEN 26\n    AND 50\n  )\n  AND (\n    y2 BETWEEN 26\n    AND 50\n  )\nGROUP BY\n  time,\n  uncertain\nORDER BY\n  time ASC",
+          "refId": "P4",
+          "sql": {
+            "columns": [],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "e29304bc-c109-495f-8105-83d9911b53c3"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  date_trunc('$timeRange', timestamp_sensor) AS \"time\",\n  uncertain AS \"P5\"\nFROM\n  etlocationuser\nWHERE\n  $__timeFilter(timestamp_sensor)\n  AND (\n    x1 BETWEEN 51\n    AND 100\n  )\n  AND (\n    x2 BETWEEN 51\n    AND 100\n  )\n  AND (\n    y1 BETWEEN 51\n    AND 100\n  )\n  AND (\n    y2 BETWEEN 51\n    AND 100\n  )\nGROUP BY\n  time,\n  uncertain\nORDER BY\n  time ASC",
+          "refId": "P5",
+          "sql": {
+            "columns": [],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Panel Title",
+      "type": "agenty-flowcharting-panel",
+      "valueName": "current",
+      "version": "0.9.0"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "fdm68idl4td6oa"
+      },
+      "description": "densidad de puntos en un área específica. Este tipo de visualización te ayudaría a identificar áreas donde hay una mayor concentración de datos.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 0,
+        "y": 20
+      },
+      "id": 2,
+      "options": {
+        "calculate": true,
+        "calculation": {
+          "yBuckets": {
+            "scale": {
+              "log": 2,
+              "type": "log"
+            }
+          }
+        },
+        "cellGap": 1,
+        "color": {
+          "exponent": 0.5,
+          "fill": "dark-orange",
+          "mode": "scheme",
+          "reverse": false,
+          "scale": "exponential",
+          "scheme": "Oranges",
+          "steps": 60
+        },
+        "exemplars": {
+          "color": "rgba(255,0,255,0.7)"
+        },
+        "filterValues": {
+          "le": 1e-9
+        },
+        "legend": {
+          "show": true
+        },
+        "rowsFrame": {
+          "layout": "auto"
+        },
+        "tooltip": {
+          "mode": "single",
+          "showColorScale": false,
+          "yHistogram": false
+        },
+        "yAxis": {
+          "axisPlacement": "left",
+          "reverse": false
+        }
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "e29304bc-c109-495f-8105-83d9911b53c3"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  date_trunc('$timeRange', timestamp_sensor) AS \"time\",\n  COUNT(*) AS \"value\",\n  y1 AS \"latitude\",\n  x1 AS \"longitude\"\nFROM\n  etlocationuser\nWHERE\n  $__timeFilter(timestamp_sensor)\nGROUP BY\n  time,\n  y1,\n  x1\nORDER BY\n  time ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "HeatMap",
+      "type": "heatmap"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "fdm68idl4td6oa"
+      },
+      "description": "Gaussiana: esta visualización utiliza una distribución gaussiana (o normal) para representar los datos. Es una curva suave con forma de campana donde el pico representa el valor más común y el ancho de la \"campana\" muestra cuánta variación hay en los datos. Esto es útil para mostrar cuánto varía una métrica con respecto al promedio.",
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 12,
+        "y": 20
+      },
+      "id": 9,
+      "options": {
+        "baidu": {
+          "callback": "bmapReady",
+          "key": ""
+        },
+        "editor": {
+          "format": "auto",
+          "height": 600
+        },
+        "editorMode": "code",
+        "gaode": {
+          "key": "",
+          "plugin": "AMap.Scale,AMap.ToolBar"
+        },
+        "getOption": "let values = [];\n\nconst series = context.panel.data.series.map((s) => {\n  if (s.refId === 'A') {\n    let uncertain = s.fields.find((f) => f.name === 'uncertain').values.buffer ||\n      s.fields.find((f) => f.name === 'uncertain').values;\n    let x1 = s.fields.find((f) => f.name === 'x1').values.buffer ||\n      s.fields.find((f) => f.name === 'x1').values;\n    let x2 = s.fields.find((f) => f.name === 'x2').values.buffer ||\n      s.fields.find((f) => f.name === 'x2').values;\n    let y1 = s.fields.find((f) => f.name === 'y1').values.buffer ||\n      s.fields.find((f) => f.name === 'y1').values;\n    let y2 = s.fields.find((f) => f.name === 'y2').values.buffer ||\n      s.fields.find((f) => f.name === 'y2').values;\n\n    // Asumiendo que todos los arrays tienen la misma longitud\n    for (let i = 0; i < uncertain.length; i++) {\n      let avgX = x1[i];\n      let avgY = y1[i];\n      values.push([avgX, avgY, uncertain[i]]);\n    }\n  }\n});\n\nlet xCoords = [...new Set(values.map(v => v[0]))]; // Extrae todas las coordenadas x únicas\nlet yCoords = [...new Set(values.map(v => v[1]))]; // Extrae todas las coordenadas y únicas\n\n// Cambia la forma en que generas tus values para que se correspondan con las coordenadas x y y\nlet heatmapData = values.map(v => [xCoords.indexOf(v[0]), yCoords.indexOf(v[1]), v[2]]);\n\nreturn {\n  tooltip: {\n    position: 'top'\n  },\n  grid: {\n    height: '50%',\n    top: '10%'\n  },\n  xAxis: {\n    type: 'category',\n    data: xCoords,\n    /* splitArea: {\n      show: true\n    } */\n  },\n  yAxis: {\n    type: 'category',\n    data: yCoords,\n    /* splitArea: {\n      show: true\n    } */\n  },\n  visualMap: {\n    min: 0,\n    max: 1,\n    orient: 'horizontal',\n    left: 'center',\n    bottom: '15%',\n    calculable: true,\n    realtime: false,\n    inRange: {\n      color: [\n        '#313695',\n        '#4575b4',\n        '#74add1',\n        '#abd9e9',\n        '#e0f3f8',\n        '#ffffbf',\n        '#fee090',\n        '#fdae61',\n        '#f46d43',\n        '#d73027',\n        '#a50026'\n      ]\n    }\n  },\n  series: [\n    {\n      name: 'Gaussian',\n      type: 'heatmap',\n      data: heatmapData,\n      /* label: {\n        show: true\n      }, */\n      emphasis: {\n        itemStyle: {\n          borderColor: '#333',\n          borderWidth: 1\n        }\n      },\n      progressive: 1000,\n      animation: false\n    }\n  ]\n};\n\n\n",
+        "google": {
+          "callback": "gmapReady",
+          "key": ""
+        },
+        "map": "none",
+        "renderer": "canvas",
+        "themeEditor": {
+          "config": "{}",
+          "height": 400,
+          "name": "default"
+        },
+        "visualEditor": {
+          "code": "let values = [];\n\nconst series = data.series.map((s) => {\n  if (s.refId === 'A') {\n    let uncertain = s.fields.find((f) => f.name === 'uncertain').values.buffer ||\n      s.fields.find((f) => f.name === 'uncertain').values;\n    let x1 = s.fields.find((f) => f.name === 'x1').values.buffer ||\n      s.fields.find((f) => f.name === 'x1').values;\n    let x2 = s.fields.find((f) => f.name === 'x2').values.buffer ||\n      s.fields.find((f) => f.name === 'x2').values;\n    let y1 = s.fields.find((f) => f.name === 'y1').values.buffer ||\n      s.fields.find((f) => f.name === 'y1').values;\n    let y2 = s.fields.find((f) => f.name === 'y2').values.buffer ||\n      s.fields.find((f) => f.name === 'y2').values;\n\n    // Asumiendo que todos los arrays tienen la misma longitud\n    for (let i = 0; i < uncertain.length; i++) {\n      let avgX = (x1[i] + x2[i]) / 2;\n      let avgY = (y1[i] + y2[i]) / 2;\n      values.push([avgX, avgY, uncertain[i]]);\n    }\n  }\n});\n\nlet xCoords = [...new Set(values.map(v => v[0]))]; // Extrae todas las coordenadas x únicas\nlet yCoords = [...new Set(values.map(v => v[1]))]; // Extrae todas las coordenadas y únicas\n\n// Cambia la forma en que generas tus values para que se correspondan con las coordenadas x y y\nlet heatmapData = values.map(v => [xCoords.indexOf(v[0]), yCoords.indexOf(v[1]), v[2]]);\n\nreturn {\n  tooltip: {\n    position: 'top'\n  },\n  grid: {\n    height: '50%',\n    top: '10%'\n  },\n  xAxis: {\n    type: 'category',\n    data: xCoords,\n    splitArea: {\n      show: true\n    }\n  },\n  yAxis: {\n    type: 'category',\n    data: yCoords,\n    splitArea: {\n      show: true\n    }\n  },\n  visualMap: {\n    min: 0,\n    max: 1,\n    calculable: true,\n    orient: 'horizontal',\n    left: 'center',\n    bottom: '15%'\n  },\n  series: [\n    {\n      name: 'Punch Card',\n      type: 'heatmap',\n      data: heatmapData,\n      /* label: {\n        show: true\n      }, */\n      emphasis: {\n        itemStyle: {\n          shadowBlur: 10,\n          shadowColor: 'rgba(0, 0, 0, 0.5)'\n        }\n      }\n    }\n  ]\n};",
+          "codeHeight": 600,
+          "dataset": [],
+          "series": []
+        }
+      },
+      "pluginVersion": "6.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "cdevgudbahypse"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\ndate_trunc('$timeRange', timestamp_sensor) AS \"time\", \n  x1 as x1,\n  x2 as x2,\n  y1 as y1,\n  y2 as y2, \n  uncertain\nFROM\n  etlocationuser\nWHERE\n  $__timeFilter(timestamp_sensor) AND user_id IN ($user_id)\nGROUP BY\n  time,\n  x1,\n  x2,\n  y1,\n  y2,\n  uncertain\nORDER BY\n  time ",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Heatmap v3 -> Gaussian",
+      "type": "volkovlabs-echarts-panel"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "fdm68idl4td6oa"
+      },
+      "description": "Eje x es una media de x1, x2\nEje Y es una media de y1,y2",
+      "gridPos": {
+        "h": 14,
+        "w": 24,
+        "x": 0,
+        "y": 34
+      },
+      "id": 10,
+      "options": {
+        "baidu": {
+          "callback": "bmapReady",
+          "key": ""
+        },
+        "editor": {
+          "format": "auto",
+          "height": 771
+        },
+        "editorMode": "code",
+        "gaode": {
+          "key": "",
+          "plugin": "AMap.Scale,AMap.ToolBar"
+        },
+        "getOption": "let x1, x2, y1, y2, timestamp_sensor, avgX, avgY;\ncontext.panel.data.series.map((s) => {\n\n  if (s.refId === 'A') {\n    x1 = s.fields.find((f) => f.name === 'x1').values.buffer ||\n      s.fields.find((f) => f.name === 'x1').values;\n    x2 = s.fields.find((f) => f.name === 'x2').values.buffer ||\n      s.fields.find((f) => f.name === 'x2').values;\n    y1 = s.fields.find((f) => f.name === 'y1').values.buffer ||\n      s.fields.find((f) => f.name === 'y1').values;\n    y2 = s.fields.find((f) => f.name === 'y2').values.buffer ||\n      s.fields.find((f) => f.name === 'y2').values;\n    timestamp_sensor = s.fields.find((f) => f.name === 'time').values.buffer ||\n      s.fields.find((f) => f.name === 'time').values;\n\n    // Calcular la media de x1, x2 y y1, y2\n    avgX = x1.map((val, i) => (val + x2[i]) / 2);\n    avgY = y1.map((val, i) => (val + y2[i]) / 2);\n\n    // Convertir cada timestamp a fecha legible\n    timestamp_sensor = timestamp_sensor.map(ts => {\n      let date = new Date(ts);\n      let day = String(date.getDate()).padStart(2, '0');\n      let month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses en JavaScript empiezan en 0\n      let year = date.getFullYear();\n      let hours = String(date.getHours()).padStart(2, '0');\n      let minutes = String(date.getMinutes()).padStart(2, '0');\n      let seconds = String(date.getSeconds()).padStart(2, '0');\n\n      return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;\n    });\n  }\n});\n\n\n\nconsole.log('console x1 >> ', timestamp_sensor)\n\nreturn {\n  grid: {\n    bottom: \"80\",\n    containLabel: true,\n    left: \"3%\",\n  },\n  legend: {},\n  series: [\n    {\n      areaStyle: {},\n      data: avgX,\n      emphasis: {\n        focus: \"series\"\n      },\n      name: \"avgX\",\n      stack: \"Total\",\n      type: \"line\"\n    },\n    {\n      areaStyle: {},\n      data: avgY,\n      emphasis: {\n        focus: \"series\"\n      },\n      name: \"avgY\",\n      stack: \"Total\",\n      type: \"line\"\n    },\n\n  ],\n  toolbox: {\n    orient: 'vertical',\n    left: 'right',\n    top: 'center',\n    feature: {\n      saveAsImage: {}\n    }\n  },\n  tooltip: {\n    axisPointer: {\n      label: {\n        backgroundColor: \"#6a7985\"\n      },\n      type: \"cross\"\n    },\n    trigger: \"axis\"\n  },\n  xAxis: [\n    {\n      boundaryGap: false,\n      data: timestamp_sensor.map(function (str) {\n        return str.replace(' ', '\\n');\n      }),\n      type: \"category\"\n    }\n  ],\n  yAxis: [\n    {\n      type: \"value\"\n    }\n  ],\n  dataZoom: [\n    {\n      show: true,\n      realtime: true,\n      start: 65,\n      end: 85\n    },\n    {\n      type: 'inside',\n      realtime: true,\n      start: 65,\n      end: 85\n    }\n  ],\n};",
+        "google": {
+          "callback": "gmapReady",
+          "key": ""
+        },
+        "map": "none",
+        "renderer": "canvas",
+        "themeEditor": {
+          "config": "{}",
+          "height": 400,
+          "name": "default"
+        },
+        "visualEditor": {
+          "code": "console.log(context);\nreturn {\n  dataset: context.editor.dataset,\n  series: context.editor.series,\n  xAxis: {\n    type: 'time',\n  },\n  yAxis: {\n    type: 'value',\n    min: 'dataMin',\n  },\n}\n",
+          "codeHeight": 600,
+          "dataset": [],
+          "series": []
+        }
+      },
+      "pluginVersion": "6.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "e29304bc-c109-495f-8105-83d9911b53c3"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  date_trunc('$timeRange', timestamp_sensor) AS \"time\",\n  x1,\n  x2,\n  y1,\n  y2\nFROM\n  etlocationuser\nWHERE\n  $__timeFilter(timestamp_sensor)\n  AND user_id IN ($user_id)\nGROUP BY\n  time,\n  x1,\n  x2,\n  y1,\n  y2\nORDER BY\n  time ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Grafico de lineas",
+      "type": "volkovlabs-echarts-panel"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "fdm68idl4td6oa"
+      },
+      "description": "muestren la actividad de los usuarios en función del tiempo o de otras variables relevantes. Esto te permitiría analizar el comportamiento de los usuarios en diferentes áreas. Puedes utilizar un gráfico de barras para visualizar la cantidad de registros de sensores por usuario, por hora del día o por área específica de la casa.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "log": 2,
+              "type": "log"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Contador",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
+                "color": "purple",
+                "value": 100
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 150
+              },
+              {
+                "color": "#EF843C",
+                "value": 200
+              },
+              {
+                "color": "#E24D42",
+                "value": 300
+              },
+              {
+                "color": "#1F78C1",
+                "value": 400
+              },
+              {
+                "color": "#BA43A9",
+                "value": 500
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byType",
+              "options": "string"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Usuario"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byType",
+              "options": "number"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Cantidad"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byType",
+              "options": "time"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Fecha"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 48
+      },
+      "id": 3,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "colorByField": "activity",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "xField": "time",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "e29304bc-c109-495f-8105-83d9911b53c3"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  date_trunc('$timeRange', timestamp_sensor) AS \"time\", \n  user_id,\n  COUNT(*) AS activity\nFROM\n  etlocationuser\nWHERE $__timeFilter(timestamp_sensor) AND user_id IN ($user_id)\nGROUP BY\n  time,\n  user_id\nORDER BY\n  time;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Gráficos de Barras o Líneas con Filtros de Usuarios",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "fdm68idl4td6oa"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "entity_id"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 275
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "timestamp_sensor"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 273
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 296
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 64
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "e29304bc-c109-495f-8105-83d9911b53c3"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  date_trunc('$timeRange', timestamp_sensor) AS \"time\",\n  entity_id,\n  x1,\n  x2,\n  y1,\n  y2,\n  uncertain,\n  user_id\nFROM\n  etlocationuser\nWHERE\n  $__timeFilter(timestamp_sensor)\n  AND user_id IN ($user_id)\nGROUP BY\n  time,\n  entity_id,\n  x1,\n  x2,\n  y1,\n  y2,\n  uncertain,\n  user_id\nORDER BY\n  time ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Panel Title",
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "fdm68idl4td6oa"
+        },
+        "definition": "SELECT user_id FROM etlocationuser",
+        "hide": 0,
+        "includeAll": true,
+        "label": "ID usuario",
+        "multi": true,
+        "name": "user_id",
+        "options": [],
+        "query": "SELECT user_id FROM etlocationuser",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "hour",
+          "value": "hour"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Granularidad",
+        "multi": false,
+        "name": "timeRange",
+        "options": [
+          {
+            "selected": true,
+            "text": "hour",
+            "value": "hour"
+          },
+          {
+            "selected": false,
+            "text": "day",
+            "value": "day"
+          },
+          {
+            "selected": false,
+            "text": "week",
+            "value": "week"
+          },
+          {
+            "selected": false,
+            "text": "month",
+            "value": "month"
+          }
+        ],
+        "query": "hour, day, week, month",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now/y",
+    "to": "now/y"
+  },
+  "timepicker": {
+    "hidden": false
+  },
+  "timezone": "",
+  "title": "Sensores de localización",
+  "uid": "a755de72-d8b9-42a8-86d4-53b2d2c378a3",
+  "version": 10,
+  "weekStart": ""
+}

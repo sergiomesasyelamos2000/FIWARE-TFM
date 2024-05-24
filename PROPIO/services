@@ -44,14 +44,9 @@ loadData () {
 		-e TUTORIAL_DUMMY_DEVICE_PORT="${TUTORIAL_DUMMY_DEVICE_PORT}" \
 		-e IOTA_NORTH_PORT="${IOTA_NORTH_PORT}" \
 		--entrypoint /bin/ash quay.io/curl/curl /provision-devices
+	waitForCrateDB
+	waitForGrafana
 	echo ""
-	echo "Ejecutando el cuaderno Jupyter de binary Sensor"
-	# Ejecuta el cuaderno Jupyter
-    #python3 sensorBinary.py > /dev/null 2>&1 &
-
-	echo "Ejecutando el cuaderno Jupyter de Location User"
-	# Ejecuta el cuaderno Jupyter
-	#python3 locationUser.py > /dev/null 2>&1 &
 }
 
 stoppingContainers () {
@@ -81,7 +76,7 @@ downContainers () {
 
 displayServices () {
 	echo ""
-	docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" --filter name=fiware-*
+	docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 	(gp ports list 2> /dev/null) || true 
 	echo ""
 }
@@ -147,6 +142,24 @@ waitForIoTAgent () {
 	done
 }
 
+waitForCrateDB() {
+  echo -e "\n⏳ Waiting for \033[1;36mCrateDB\033[0m to be available\n"
+  while ! [ `docker inspect --format='{{.State.Health.Status}}' db-crate` == "healthy" ]
+  do
+    echo -e "CrateDB HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://db-crate:4200/'` " (waiting for 200)"
+    sleep 1
+  done
+}
+
+waitForGrafana() {
+  echo -e "\n⏳ Waiting for \033[1;36mGrafana\033[0m to be available\n"
+  while ! [ `docker inspect --format='{{.State.Health.Status}}' grafana` == "healthy" ]
+  do
+    echo -e "Grafana HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://localhost:3003/'` " (waiting for 200)"
+    sleep 1
+  done
+}
+
 
 
 command="$1"
@@ -157,18 +170,19 @@ case "${command}" in
 	 "start")
 		export $(cat .env | grep "#" -v)
 		stoppingContainers
-		echo -e "Starting containers: \033[1;34mOrion\033[0m, \033[1;34mQuantumLeap\033[0m, \033[1;36mIoT-Agent\033[0m, \033[1mTutorial\033[0m, a \033[1mGrafana\033[0m metrics dashboard, \033[1mCrateDB\033[0m and \033[1mMongoDB\033[0m databases, \033[1mRedis\033[0m cache and \033[1mMosquitto\033[0m MQTT broker"
+		echo -e "Starting containers: \033[1;34mOrion\033[0m, \033[1;34mQuantumLeap\033[0m, \033[1;36mIoT-Agent\033[0m, a \033[1mGrafana\033[0m metrics dashboard, \033[1mCrateDB\033[0m and \033[1mMongoDB\033[0m databases and \033[1mMosquitto\033[0m MQTT broker"
 		echo -e "- \033[1;34mOrion\033[0m is the context broker"
 		echo -e "- \033[1;34mQuantumLeap\033[0m will write to CrateDB"
 		echo -e "- \033[1mGrafana\033[0m will read from CrateDB"
 		echo -e "- \033[1;36mIoT-Agent\033[0m is configured for the UltraLight Protocol"
-		echo -e "- \033[1mTutorial\033[0m acts as a series of dummy IoT Sensors over MQTT"
+		echo -e "- \033[1mApplication\033[0m acts as a series of dummy IoT Sensors over MQTT"
 		echo -e "- \033[1mMosquitto\033[0m acts as an MQTT Message Broker"
+		echo -e "- \033[1;36mCrateDB\033[0m is a distributed SQL database"
 		echo ""
 		${dockerCmd} up -d --remove-orphans
 		loadData
 		displayServices
-		echo -e "Now open \033[4mhttp://localhost:3000/device/monitor\033[0m"
+		echo -e "Grafana is now open \033[4mhttp://localhost:3003\033[0m"
 		;;
 	"stop")
 		export $(cat .env | grep "#" -v)
