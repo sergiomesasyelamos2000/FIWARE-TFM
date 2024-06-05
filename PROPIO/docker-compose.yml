@@ -111,17 +111,17 @@ services:
     volumes:
       - crate-db:/data
     healthcheck:
-      test: curl --fail -s http://127.0.0.1:4200/#!/ || exit 1
+      test: curl --fail -s http://crate-db:4200/#!/ || exit 1
       interval: 5s
 
   # Other services
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:10.4.0
     container_name: grafana
     depends_on:
       - crate-db
     ports:
-      - "${GRAFANA_PORT}:${GRAFANA_PORT}"
+      - "${GRAFANA_PORT}:${GRAFANA_APP_PORT}"
     environment:
       - GF_INSTALL_PLUGINS=orchestracities-map-panel,grafana-clock-panel,grafana-worldmap-panel
       - GF_SECURITY_ALLOW_EMBEDDING=true
@@ -131,7 +131,7 @@ services:
     volumes:
       - grafana:/var/lib/grafana
     healthcheck:
-      test: curl --fail -s http://grafana:${TUTORIAL_APP_PORT}/login || exit 1
+      test: curl --fail -s http://grafana:${GRAFANA_APP_PORT}/datasources || exit 1
       interval: 5s
 
   mosquitto:

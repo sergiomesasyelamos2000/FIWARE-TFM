@@ -182,7 +182,7 @@ case "${command}" in
 		${dockerCmd} up -d --remove-orphans
 		loadData
 		displayServices
-		echo -e "Grafana is now open \033[4mhttp://localhost:3003\033[0m"
+		echo -e "Grafana is now open \033[4mhttp://localhost:${GRAFANA_PORT}\033[0m"
 		;;
 	"stop")
 		export $(cat .env | grep "#" -v)
