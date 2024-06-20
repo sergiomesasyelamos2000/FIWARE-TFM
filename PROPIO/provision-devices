@@ -45,44 +45,6 @@ curl -s -o /dev/null -X POST \
     ]
 }'
 
-# curl -s -o /dev/null -X POST \
-#   "http://iot-agent:$IOTA_NORTH_PORT/iot/devices" \
-#   -H 'Content-Type: application/json' \
-#   -H 'fiware-service: openiot' \
-#   -H 'fiware-servicepath: /' \
-#   -d '{
-#     "devices": [
-#         {
-#             "device_id": "binarySensor001",
-#             "entity_name": "urn:ngsi-ld:BinarySensor:001",
-#             "entity_type": "BinarySensor",
-#             "protocol": "PDI-IoTA-UltraLight",
-#             "transport": "MQTT",
-#             "timezone": "Europe/Madrid",
-#             "attributes": [
-#                 {
-#                     "object_id": "timestamp_sensor",
-#                     "name": "timestamp_sensor",
-#                     "type": "DateTime"
-#                 },
-#                 {
-#                     "object_id": "activo",
-#                     "name": "activo",
-#                     "type": "Number"
-#                 }
-#             ],
-#             "static_attributes": [
-#                 {
-#                     "name": "tipo_sensor",
-#                     "type": "Text",
-#                     "value": "cocina_puerta"
-#                 }
-#             ]
-#         }
-#     ]
-# }
-# '
-
 curl -s -o /dev/null -X POST \
   "http://iot-agent:$IOTA_NORTH_PORT/iot/devices" \
   -H 'Content-Type: application/json' \
@@ -117,64 +79,6 @@ curl -s -o /dev/null -X POST \
     ]
 }
 '
-
-# curl -s -o /dev/null -X POST \
-#   "http://iot-agent:$IOTA_NORTH_PORT/iot/devices" \
-#   -H 'Content-Type: application/json' \
-#   -H 'fiware-service: openiot' \
-#   -H 'fiware-servicepath: /' \
-#   -d '{
-#     "devices": [
-#         {
-#             "device_id": "locationUser001",
-#             "entity_name": "urn:ngsi-ld:LocationUser:001",
-#             "entity_type": "LocationUser",
-#             "protocol": "PDI-IoTA-UltraLight",
-#             "transport": "MQTT",
-#             "timezone": "Europe/Madrid",
-#             "attributes": [
-#                 {
-#                     "object_id": "timestamp_sensor",
-#                     "name": "timestamp_sensor",
-#                     "type": "DateTime"
-#                 },
-#                 {
-#                     "object_id": "x1",
-#                     "name": "x1",
-#                     "type": "Number"
-#                 },
-#                 {
-#                     "object_id": "x2",
-#                     "name": "x2",
-#                     "type": "Number"
-#                 },
-#                 {
-#                     "object_id": "y1",
-#                     "name": "y1",
-#                     "type": "Number"
-#                 },
-#                 {
-#                     "object_id": "y2",
-#                     "name": "y2",
-#                     "type": "Number"
-#                 },
-#                 {
-#                     "object_id": "uncertain",
-#                     "name": "uncertain",
-#                     "type": "Float"
-#                 }
-#             ],
-#             "static_attributes": [
-#                 {
-#                     "name": "user_id",
-#                     "type": "Text",
-#                     "value": "A"
-#                 }
-#             ]
-#         }
-#     ]
-# }
-# '
 
 curl -s -o /dev/null -X POST \
   "http://iot-agent:$IOTA_NORTH_PORT/iot/devices" \
