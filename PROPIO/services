@@ -2,7 +2,7 @@
 #
 #  Command Line Interface to start all services associated with the Tutorial
 #
-#  For this tutorial the commands are merely a convenience script to run docker or docker-compose
+#  For this tfm the commands are merely a convenience script to run docker or docker-compose
 #
 #  Each services script can be run using either docker-compose (the external tool with the hyphen -) 
 #  or docker compose (the newer version directly bundled with Docker with a space )
@@ -57,7 +57,7 @@ stoppingContainers () {
 downContainers () {
 	echo "Stopping running containers"
 	${dockerCmd} down -v --remove-orphans
-	CONTAINERS=$(docker ps --filter "label=org.fiware=tutorial" -aq)
+	CONTAINERS=$(docker ps --filter "label=org.fiware=tfm" -aq)
 	if [[ -n $CONTAINERS ]]; then 
 		echo "Stopping containers"
 		docker rm -f $CONTAINERS || true
@@ -67,9 +67,9 @@ downContainers () {
 		echo "Removing old volumes"
 		docker volume rm $VOLUMES || true
 	fi
-	NETWORKS=$(docker network ls  --filter "label=org.fiware=tutorial" -q) 
+	NETWORKS=$(docker network ls  --filter "label=org.fiware=tfm" -q) 
 	if [[ -n $NETWORKS ]]; then 
-		echo "Removing tutorial networks"
+		echo "Removing networks"
 		docker network rm $NETWORKS || true
 	fi
 }
