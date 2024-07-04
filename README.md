@@ -2,9 +2,15 @@
  
 Este repositorio contiene la configuración para desplegar un entorno FIWARE utilizando Docker Compose. Este entorno incluye varios servicios de FIWARE, como Orion Context Broker, Quantum Leap, IoT Agent, y bases de datos necesarias para su funcionamiento.
 
+![angular-nest](https://www.fiware.org/wp-content/uploads/2018/05/FW_VERT_noclaim_RGB-forms.png)
+
+
+[![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)]()
+
 ## Contenido
 
 - [Descripción del Proyecto](#descripción-del-proyecto)
+- [Arquitectura](#arquitectura)
 - [Servicios Incluidos](#servicios-incluidos)
 - [Requisitos Previos](#requisitos-previos)
 - [Configuración](#configuración)
@@ -13,6 +19,11 @@ Este repositorio contiene la configuración para desplegar un entorno FIWARE uti
 ## Descripción del Proyecto
 
 El objetivo de este proyecto es proporcionar un entorno completo para la gestión de datos de IoT utilizando la plataforma FIWARE. Este entorno permite la integración de datos desde dispositivos IoT, el almacenamiento de datos históricos y la visualización de datos en tiempo real.
+
+## Arquitectura
+
+![image](docs/imgs/arquitectura.png)
+
 
 ## Servicios Incluidos
 
@@ -88,7 +99,7 @@ El script primero verifica el número de argumentos pasados para determinar el c
 
 - **addDatabaseIndex**: Añade índices en las bases de datos MongoDB para optimizar las consultas realizadas por Orion Context Broker y el IoT Agent.
 
-### Espera de Servicios
+### Scripts de despliegue
 
 El script incluye varias funciones (`waitForMongo`, `waitForOrion`, `waitForIoTAgent`, `waitForCrateDB`, `waitForGrafana`) diseñadas para esperar a que un servicio específico esté completamente disponible antes de proceder. Esto se logra mediante la verificación del estado de salud del contenedor o la respuesta de una solicitud HTTP.
 
