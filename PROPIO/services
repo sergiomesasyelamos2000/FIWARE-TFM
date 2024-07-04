@@ -1,18 +1,4 @@
 #!/bin/bash
-#
-#  Command Line Interface to start all services associated with the Tutorial
-#
-#  For this tfm the commands are merely a convenience script to run docker or docker-compose
-#
-#  Each services script can be run using either docker-compose (the external tool with the hyphen -) 
-#  or docker compose (the newer version directly bundled with Docker with a space )
-#
-#  if you start up with the following command:
-#
-#  ./services start legacy
-#
-# This will force the script to use docker-compose which may be more reliable in 
-# some cases (or if an older version of Docker is being used)
 
 set -e
 
@@ -31,11 +17,6 @@ loadData () {
 	waitForMongo
 	addDatabaseIndex
 	waitForOrion
-	# docker run --rm -v $(pwd)/import-data:/import-data \
-	# 	--network fiware_default \
-	# 	-e ORION_PORT="${ORION_PORT}" \
-	# 	-e TUTORIAL_APP_PORT="${TUTORIAL_APP_PORT}" \
-	# 	--entrypoint /bin/ash quay.io/curl/curl /import-data
 	waitForIoTAgent
 	docker run --rm -v $(pwd)/provision-devices:/provision-devices \
 		--network fiware_default \

@@ -18,14 +18,14 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "ddfnqgvmg1g5cd"
+        "uid": "ddp9rez6jnzswb"
       },
       "fieldConfig": {
         "defaults": {
@@ -39,10 +39,40 @@
               "viz": false
             }
           },
+          "fieldMinMax": false,
           "mappings": [],
           "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "value Activo"
+            },
+            "properties": [
+              {
+                "id": "filterable",
+                "value": false
+              },
+              {
+                "id": "displayName",
+                "value": "Activo"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "value Inactivo"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Inactivo"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -60,8 +90,11 @@
           "displayMode": "table",
           "placement": "right",
           "showLegend": true,
+          "sortBy": "Percent",
+          "sortDesc": true,
           "values": [
-            "percent"
+            "percent",
+            "value"
           ]
         },
         "pieType": "pie",
@@ -70,7 +103,7 @@
             "lastNotNull"
           ],
           "fields": "",
-          "values": true
+          "values": false
         },
         "tooltip": {
           "mode": "single",
@@ -85,9 +118,9 @@
             "uid": "e29304bc-c109-495f-8105-83d9911b53c3"
           },
           "editorMode": "code",
-          "format": "table",
+          "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT \n  CASE \n    WHEN activo = 0 THEN 'Inactivo'\n    WHEN activo = 1 THEN 'Activo'\n  END AS status,\n  COUNT(*) AS value\nFROM etbinarysensor\nGROUP BY status",
+          "rawSql": "SELECT \n  date_trunc('$timeRange', timestamp_sensor) AS \"time\",\n  CASE \n    WHEN activo = 0 THEN 'Inactivo'\n    WHEN activo = 1 THEN 'Activo'\n  END AS status,\n  COUNT(*) AS value\nFROM etbinarysensor\nWHERE\n  $__timeFilter(timestamp_sensor)\nGROUP BY \n  time,\n  status\nORDER BY\n  time ASC",
           "refId": "A",
           "sql": {
             "columns": [
@@ -114,7 +147,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "ddfnqgvmg1g5cd"
+        "uid": "ddp9rez6jnzswb"
       },
       "fieldConfig": {
         "defaults": {
@@ -128,10 +161,36 @@
               "viz": false
             }
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "Eventos Sink": {
+                  "color": "red",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
           "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Eventos Sink"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#00ffff",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -159,7 +218,7 @@
             "lastNotNull"
           ],
           "fields": "",
-          "values": true
+          "values": false
         },
         "tooltip": {
           "mode": "single",
@@ -174,9 +233,9 @@
             "uid": "e29304bc-c109-495f-8105-83d9911b53c3"
           },
           "editorMode": "code",
-          "format": "table",
+          "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT count(*) AS \"Eventos\", tipo_sensor\nFROM etbinarySensor\nWHERE activo = 1\nGROUP BY tipo_sensor\nORDER BY \"Eventos\" DESC",
+          "rawSql": "SELECT \n  date_trunc('$timeRange', timestamp_sensor) AS \"time\",\n  count(*) AS \"Eventos\", \n  tipo_sensor\nFROM \n  etbinarySensor\nWHERE \n  $__timeFilter(timestamp_sensor) AND\n  activo = 1\nGROUP BY \n  time,\n  tipo_sensor\nORDER BY \n  time ASC",
           "refId": "A",
           "sql": {
             "columns": [
@@ -197,13 +256,13 @@
           }
         }
       ],
-      "title": "Gráfico de pastel de eventos por sensor",
+      "title": "Gráfico de pastel de eventos por sensor activo",
       "type": "piechart"
     },
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "ddfnqgvmg1g5cd"
+        "uid": "ddp9rez6jnzswb"
       },
       "fieldConfig": {
         "defaults": {
@@ -214,7 +273,7 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "",
+            "axisLabel": "Nº eventos",
             "axisPlacement": "auto",
             "fillOpacity": 80,
             "gradientMode": "none",
@@ -247,11 +306,57 @@
           },
           "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Eventos WC"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#31c3e3",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Eventos Pans"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#8c564b",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Eventos Sink"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#e377c2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 13,
+        "w": 24,
         "x": 0,
         "y": 8
       },
@@ -267,13 +372,14 @@
           "placement": "right",
           "showLegend": true
         },
-        "orientation": "horizontal",
+        "orientation": "auto",
         "showValue": "auto",
         "stacking": "none",
         "tooltip": {
           "mode": "single",
           "sort": "none"
         },
+        "xField": "Time",
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
@@ -284,9 +390,9 @@
             "uid": "e29304bc-c109-495f-8105-83d9911b53c3"
           },
           "editorMode": "code",
-          "format": "table",
+          "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT date_trunc('hour', timestamp_sensor) AS \"time\", count(*) AS \"Eventos\", tipo_sensor\nFROM etbinarysensor\nWHERE activo = 1\nGROUP BY date_trunc('hour', timestamp_sensor), tipo_sensor\nORDER BY \"time\", \"Eventos\" DESC",
+          "rawSql": "SELECT date_trunc('$timeRange', timestamp_sensor) AS \"time\", count(*) AS \"Eventos\", tipo_sensor\nFROM etbinarysensor\nWHERE $__timeFilter(timestamp_sensor) AND activo = 1\nGROUP BY time, tipo_sensor\nORDER BY \"time\", \"Eventos\" DESC\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -313,7 +419,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "ddfnqgvmg1g5cd"
+        "uid": "ddp9rez6jnzswb"
       },
       "fieldConfig": {
         "defaults": {
@@ -324,7 +430,7 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "",
+            "axisLabel": "Nº eventos",
             "axisPlacement": "auto",
             "fillOpacity": 80,
             "gradientMode": "none",
@@ -341,7 +447,45 @@
               "mode": "off"
             }
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "Closet_Room_1": {
+                  "color": "green",
+                  "index": 7
+                },
+                "Dishwasher": {
+                  "color": "yellow",
+                  "index": 3
+                },
+                "Fridge": {
+                  "color": "orange",
+                  "index": 4
+                },
+                "Microwave": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "Pans": {
+                  "color": "#d631ae",
+                  "index": 6
+                },
+                "Sink": {
+                  "color": "#ab5050",
+                  "index": 5
+                },
+                "Tap": {
+                  "color": "red",
+                  "index": 0
+                },
+                "WC": {
+                  "color": "blue",
+                  "index": 1
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -360,10 +504,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 8
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 21
       },
       "id": 4,
       "options": {
@@ -401,7 +545,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT count(*) AS \"Eventos\", tipo_sensor\nFROM etbinarysensor\nWHERE activo = 1\nGROUP BY tipo_sensor\nORDER BY \"Eventos\" DESC",
+          "rawSql": "SELECT \n  date_trunc('$timeRange', timestamp_sensor) AS \"time\",\n  count(*) AS \"Eventos\", \n  tipo_sensor\nFROM \n  etbinarysensor\nWHERE \n  $__timeFilter(timestamp_sensor) AND\n  activo = 1\nGROUP BY \n  time,\n  tipo_sensor\nORDER BY \n  \"Eventos\" DESC,\n  time ASC\n\n  ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -428,7 +572,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "ddfnqgvmg1g5cd"
+        "uid": "ddp9rez6jnzswb"
       },
       "fieldConfig": {
         "defaults": {
@@ -451,8 +595,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -461,15 +604,104 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tipo_sensor"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "Closet_Room_1": {
+                        "color": "#800080",
+                        "index": 2
+                      },
+                      "Closet_Room_2": {
+                        "color": "#8c564b",
+                        "index": 7
+                      },
+                      "Closet_Room_3": {
+                        "color": "#e377c2",
+                        "index": 8
+                      },
+                      "Dishwasher": {
+                        "color": "blue",
+                        "index": 4
+                      },
+                      "Microwave": {
+                        "color": "#17becf",
+                        "index": 6
+                      },
+                      "Pans": {
+                        "color": "orange",
+                        "index": 1
+                      },
+                      "Sink": {
+                        "color": "red",
+                        "index": 0
+                      },
+                      "Tap": {
+                        "color": "purple",
+                        "index": 5
+                      },
+                      "WC": {
+                        "color": "green",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "displayName",
+                "value": "Tipo sensor"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "activo"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "Activo": {
+                        "color": "#bcc9ba",
+                        "index": 0
+                      },
+                      "Inactivo": {
+                        "color": "super-light-red",
+                        "index": 1
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "displayName",
+                "value": "Actividad"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 12,
+        "h": 15,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 33
       },
-      "id": 3,
+      "id": 8,
       "options": {
         "alignValue": "left",
         "legend": {
@@ -494,7 +726,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT timestamp_sensor AS \"time\", activo, tipo_sensor\nFROM etbinarysensor\nORDER BY timestamp_sensor",
+          "rawSql": "SELECT\n  date_trunc('$timeRange', timestamp_sensor) AS \"time\",\n  CASE\n    WHEN activo = 0 THEN 'Inactivo'\n    WHEN activo = 1 THEN 'Activo'\n  END AS activo,\n  tipo_sensor\nFROM\n  etbinarysensor\nWHERE\n  $__timeFilter(timestamp_sensor)\nGROUP BY\n  time,\n  activo,\n  tipo_sensor\nORDER BY\n  time ASC\n\n\n\n  ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -515,13 +747,13 @@
           }
         }
       ],
-      "title": "Grafico de lineas de tiempo",
+      "title": "Grafico de lineas de tiempo ",
       "type": "state-timeline"
     },
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "ddfnqgvmg1g5cd"
+        "uid": "ddp9rez6jnzswb"
       },
       "fieldConfig": {
         "defaults": {
@@ -534,7 +766,8 @@
             "scaleDistribution": {
               "type": "linear"
             }
-          }
+          },
+          "fieldMinMax": false
         },
         "overrides": []
       },
@@ -542,35 +775,49 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 28
+        "y": 48
       },
       "id": 2,
       "options": {
         "calculate": false,
-        "cellGap": 1,
+        "calculation": {
+          "xBuckets": {
+            "mode": "size"
+          },
+          "yBuckets": {
+            "scale": {
+              "type": "linear"
+            }
+          }
+        },
+        "cellGap": 2,
+        "cellValues": {
+          "unit": "none"
+        },
         "color": {
           "exponent": 0.5,
           "fill": "dark-orange",
+          "max": 1,
+          "min": 0,
           "mode": "scheme",
           "reverse": false,
           "scale": "exponential",
-          "scheme": "Oranges",
+          "scheme": "Warm",
           "steps": 64
         },
         "exemplars": {
-          "color": "rgba(255,0,255,0.7)"
+          "color": "red"
         },
-        "filterValues": {
-          "le": 1e-9
-        },
+        "filterValues": {},
         "legend": {
           "show": true
         },
         "rowsFrame": {
-          "layout": "auto"
+          "layout": "auto",
+          "value": "Valor"
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "showColorScale": false,
           "yHistogram": false
         },
@@ -589,7 +836,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT timestamp_sensor AS time, tipo_sensor AS metric, activo\nFROM etbinarysensor\nORDER BY timestamp_sensor ASC",
+          "rawSql": "SELECT \n  date_trunc('$timeRange', timestamp_sensor) AS \"time\", \n  tipo_sensor AS \"metric\", \n  CAST(activo AS INT) AS activo\nFROM \n  etbinarysensor\nWHERE \n  $__timeFilter(timestamp_sensor)\nGROUP BY \n  time,\n  metric, \n  activo\nORDER BY \n  time ASC",
           "refId": "A",
           "sql": {
             "columns": [
@@ -616,7 +863,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "ddfnqgvmg1g5cd"
+        "uid": "ddp9rez6jnzswb"
       },
       "fieldConfig": {
         "defaults": {
@@ -634,13 +881,73 @@
           "fieldMinMax": false,
           "mappings": []
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "  Closet_Room_1"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#17becf",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "  WC"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#8c564b",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "  Sink"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#e377c2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "  Microwave"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 28
+        "y": 48
       },
       "id": 1,
       "options": {
@@ -661,10 +968,10 @@
             "lastNotNull"
           ],
           "fields": "",
-          "values": true
+          "values": false
         },
         "tooltip": {
-          "mode": "multi",
+          "mode": "single",
           "sort": "asc"
         }
       },
@@ -675,9 +982,9 @@
             "uid": "e29304bc-c109-495f-8105-83d9911b53c3"
           },
           "editorMode": "code",
-          "format": "table",
+          "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT tipo_sensor, COUNT(*) as total FROM etbinarysensor GROUP BY tipo_sensor",
+          "rawSql": "SELECT \n  date_trunc('$timeRange', timestamp_sensor) AS \"time\",\n  tipo_sensor, \n  COUNT(*) as \" \" \nFROM \n  etbinarysensor\nWHERE \n  $__timeFilter(timestamp_sensor)\nGROUP BY \n  time,\n  tipo_sensor\nORDER BY \n  time ASC",
           "refId": "A",
           "sql": {
             "columns": [
@@ -706,16 +1013,55 @@
   "schemaVersion": 39,
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "hour",
+          "value": "hour"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Granularidad",
+        "multi": false,
+        "name": "timeRange",
+        "options": [
+          {
+            "selected": true,
+            "text": "hour",
+            "value": "hour"
+          },
+          {
+            "selected": false,
+            "text": "day",
+            "value": "day"
+          },
+          {
+            "selected": false,
+            "text": "week",
+            "value": "week"
+          },
+          {
+            "selected": false,
+            "text": "month",
+            "value": "month"
+          }
+        ],
+        "query": "hour, day, week, month",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
   },
   "time": {
-    "from": "now-6h",
-    "to": "now"
+    "from": "now/y",
+    "to": "now/y"
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Sensores binarios",
+  "title": "Sensores ambientales",
   "uid": "fdez2ki4icmpsc",
-  "version": 8,
+  "version": 24,
   "weekStart": ""
 }
