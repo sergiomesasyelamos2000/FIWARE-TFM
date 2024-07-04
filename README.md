@@ -2,9 +2,9 @@
  
 Este repositorio contiene la configuración para desplegar un entorno FIWARE utilizando Docker Compose. Este entorno incluye varios servicios de FIWARE, como Orion Context Broker, Quantum Leap, IoT Agent, y bases de datos necesarias para su funcionamiento.
 
-![angular-nest](https://www.fiware.org/wp-content/uploads/2018/05/FW_VERT_noclaim_RGB-forms.png)
+![fiware](https://www.fiware.org/wp-content/uploads/2018/05/FW_VERT_noclaim_RGB-forms.png)
 
-
+![FIWARE](https://img.shields.io/badge/Angular-OpenSource-brightgreen)
 [![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)]()
 
 ## Contenido
