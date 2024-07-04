@@ -1,4 +1,4 @@
-# Trabajo Fin de Máster - FIWARE Deployment
+# TFM - FIWARE Deployment
 
 Este repositorio contiene la configuración para desplegar un entorno FIWARE utilizando Docker Compose. Este entorno incluye varios servicios de FIWARE, como Orion Context Broker, Quantum Leap, IoT Agent, y bases de datos necesarias para su funcionamiento.
 
@@ -11,6 +11,7 @@ Este repositorio contiene la configuración para desplegar un entorno FIWARE uti
 - [Ejecución](#ejecución)
 - [Verificación del Despliegue](#verificación-del-despliegue)
 - [Diagrama del Entorno](#diagrama-del-entorno)
+- [Comandos de Servicios](#comandos-de-servicios)
 - [Licencia](#licencia)
 
 ## Descripción del Proyecto
