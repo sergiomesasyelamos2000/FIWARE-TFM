@@ -1,4 +1,4 @@
-# TFM - FIWARE Deployment
+:page_facing_up: # TFM - Documentación FIWARE 
  
 Este repositorio contiene la configuración para desplegar un entorno FIWARE utilizando Docker Compose. Este entorno incluye varios servicios de FIWARE, como Orion Context Broker, Quantum Leap, IoT Agent, y bases de datos necesarias para su funcionamiento.
 
@@ -8,11 +8,7 @@ Este repositorio contiene la configuración para desplegar un entorno FIWARE uti
 - [Servicios Incluidos](#servicios-incluidos)
 - [Requisitos Previos](#requisitos-previos)
 - [Configuración](#configuración)
-- [Ejecución](#ejecución)
-- [Verificación del Despliegue](#verificación-del-despliegue)
-- [Diagrama del Entorno](#diagrama-del-entorno)
-- [Comandos de Servicios](#comandos-de-servicios)
-- [Licencia](#licencia)
+- [Documentación y Despliegue](#documentación-y-despliegue)
 
 ## Descripción del Proyecto
 
@@ -70,4 +66,53 @@ MONGO_DB_PORT=27017
 CRATE_VERSION=latest
 GRAFANA_PORT=3000
 GRAFANA_APP_PORT=3000
+```
+
+## Documentación y Despliegue
+
+Este script, escrito en Bash, facilita la gestión de contenedores Docker para el entorno FIWARE, permitiendo crear, iniciar, detener y eliminar contenedores y recursos asociados. A continuación, se detalla su funcionamiento:
+
+### Comprobación de Argumentos
+
+El script primero verifica el número de argumentos pasados para determinar el comando de Docker Compose a utilizar. Si se pasan exactamente dos argumentos, se utiliza `docker-compose`; de lo contrario, se opta por `docker compose`. Además, si se invoca el script sin argumentos o con un número incorrecto de estos, se muestra un mensaje de error y se termina la ejecución.
+
+### Funciones Principales
+
+- **loadData**: Esta función se encarga de esperar a que los servicios MongoDB, Orion Context Broker, IoT Agent, CrateDB y Grafana estén disponibles. Una vez listos, ejecuta un contenedor Docker temporal para cargar datos de dispositivos provisionales en el entorno.
+
+- **stoppingContainers**: Detiene los contenedores en ejecución utilizando el comando de Docker Compose determinado al inicio del script.
+
+- **downContainers**: Similar a `stoppingContainers`, pero además elimina los contenedores, volúmenes, y redes asociadas, limpiando completamente el entorno.
+
+- **displayServices**: Muestra los contenedores en ejecución y sus puertos, proporcionando una visión general del estado del entorno.
+
+- **addDatabaseIndex**: Añade índices en las bases de datos MongoDB para optimizar las consultas realizadas por Orion Context Broker y el IoT Agent.
+
+### Espera de Servicios
+
+El script incluye varias funciones (`waitForMongo`, `waitForOrion`, `waitForIoTAgent`, `waitForCrateDB`, `waitForGrafana`) diseñadas para esperar a que un servicio específico esté completamente disponible antes de proceder. Esto se logra mediante la verificación del estado de salud del contenedor o la respuesta de una solicitud HTTP.
+
+### Ejecución de Comandos
+
+El script acepta los siguientes comandos como primer argumento:
+
+- **start**: Inicia los contenedores y carga los datos provisionales.
+- **stop**: Detiene los contenedores en ejecución.
+- **create**: Prepara el entorno descargando las imágenes Docker necesarias.
+- **down**: Detiene y elimina los contenedores, volúmenes, y redes.
+
+Cada comando activa una serie de acciones específicas definidas en las funciones correspondientes.
+
+### Uso
+
+Para utilizar el script, en primer lugar se deben crear y descargar las imágenes de DockerHub con el siguiente comando:
+
+```bash
+./services create
+```
+
+A continuación, para desplegar el entorno de FIWARE se debe lanzar el siguiente comando:
+
+```bash
+./services start
 ```
