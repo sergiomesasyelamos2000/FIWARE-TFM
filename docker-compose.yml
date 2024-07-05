@@ -136,7 +136,7 @@ services:
       - /etc/letsencrypt/live/amaltea.ugr.es/fullchain.pem:/etc/grafana/ssl/fullchain.pem
       - /etc/letsencrypt/live/amaltea.ugr.es/privkey.pem:/etc/grafana/ssl/privkey.pem
     healthcheck:
-      test: curl --fail -s https://amaltea.ugr.es:3003/datasources || exit 1
+      test: curl --fail -s https://amaltea.ugr.es:${GRAFANA_APP_PORT}/datasources || exit 1
       interval: 5s
 
   mosquitto:
