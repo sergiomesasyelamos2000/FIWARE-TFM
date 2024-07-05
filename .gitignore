@@ -35,9 +35,8 @@ jspm_packages/
 .eslintcache
 *.tgz
 .next
-mosquitto/
-*./TFM/PROPIO/mosquitto/data
-.PROPIO/mosquitto/data/mosquitto.db
+*./mosquitto/data
+./mosquitto/data/mosquitto.db
 real_data/
 !real_data/binary_sensor/binary_sensor.ipynb
 !real_data/location_sensor/location_sensor.ipynb

@@ -83,7 +83,7 @@ GRAFANA_APP_PORT=3000
 
 ## Documentación y Despliegue
 
-Este script, escrito en Bash, facilita la gestión de contenedores Docker para el entorno FIWARE, permitiendo crear, iniciar, detener y eliminar contenedores y recursos asociados. A continuación, se detalla su funcionamiento:
+Se debe destacar que se ha hecho uso del script `services`. Este script, escrito en Bash, facilita la gestión de contenedores Docker para el entorno FIWARE, permitiendo crear, iniciar, detener y eliminar contenedores y recursos asociados. A continuación, se detalla su funcionamiento:
 
 ### Comprobación de Argumentos
 
