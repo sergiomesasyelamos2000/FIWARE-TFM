@@ -129,12 +129,12 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
       - GF_SERVER_PROTOCOL=https
-      - GF_SERVER_CERT_FILE=/etc/grafana/ssl/fullchain.pem
-      - GF_SERVER_CERT_KEY=/etc/grafana/ssl/privkey.pem
+      - GF_SERVER_CERT_FILE=/etc/grafana/ssl/amaltea_ugr_es.pem
+      - GF_SERVER_CERT_KEY=/etc/grafana/ssl/amaltea.ugr.es_privatekey.pem
     volumes:
       - grafana:/var/lib/grafana
-      - /etc/letsencrypt/live/amaltea.ugr.es/fullchain.pem:/etc/grafana/ssl/fullchain.pem
-      - /etc/letsencrypt/live/amaltea.ugr.es/privkey.pem:/etc/grafana/ssl/privkey.pem
+      - /home/aurora/ssl_certificates/amaltea_ugr_es.pem:/etc/grafana/ssl/amaltea_ugr_es.pem
+      - /home/aurora/ssl_certificates/amaltea.ugr.es_privatekey.pem:/etc/grafana/ssl/amaltea.ugr.es_privatekey.pem
     healthcheck:
       test: curl --fail -s https://amaltea.ugr.es:${GRAFANA_APP_PORT}/datasources || exit 1
       interval: 5s
